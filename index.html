@@ -75,8 +75,7 @@
 
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-5xl font-bold text-blue-800">הסדר מחירי הדיור לצעירים (2025)</h1>
-            <p class="text-md md:text-lg text-gray-600 mt-2">כלי להשוואה והבנת השינויים במחירי השכירות</p>
+            <h1 class="text-3xl md:text-5xl font-bold text-blue-800">תמורות בדמי הרשאה נצר-סרני 2025</h1>
         </header>
 
         <!-- Desktop Tab Navigation -->
@@ -97,28 +96,28 @@
                 <h2 class="text-2xl md:text-3xl font-semibold text-center mb-8 text-blue-700">מחשבון שכירות אישי</h2>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 items-end">
                     <div>
-                        <label for="ageInput" class="block mb-2 text-sm font-medium text-gray-900">הזן גיל:</label>
+                        <label for="ageInput" class="block mb-2 text-sm font-medium text-gray-900">גיל:</label>
                         <input type="number" id="ageInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     </div>
                     <div>
-                        <label for="areaSelectCalc" class="block mb-2 text-sm font-medium text-gray-900">בחר אזור מגורים:</label>
+                        <label for="areaSelectCalc" class="block mb-2 text-sm font-medium text-gray-900">אזור מגורים:</label>
                         <select id="areaSelectCalc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                           <option selected disabled>בחר...</option>
+                           <option selected disabled>בחירה...</option>
                         </select>
                     </div>
                     <div>
-                        <label for="houseTypeSelectCalc" class="block mb-2 text-sm font-medium text-gray-900">בחר סוג בית:</label>
+                        <label for="houseTypeSelectCalc" class="block mb-2 text-sm font-medium text-gray-900">סוג בית:</label>
                         <select id="houseTypeSelectCalc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
-                            <option selected disabled>בחר קודם אזור...</option>
+                            <option selected disabled>יש לבחור קודם אזור...</option>
                         </select>
                     </div>
                     <div>
-                        <label for="sqmInputCalc" class="block mb-2 text-sm font-medium text-gray-900">הזן שטח (מ"ר):</label>
+                        <label for="sqmInputCalc" class="block mb-2 text-sm font-medium text-gray-900">שטח לחישוב ארנונה (מ"ר):</label>
                         <input type="number" id="sqmInputCalc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
                     </div>
                 </div>
                 <div class="text-center mt-6">
-                    <button id="calculateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 disabled:bg-gray-400 text-lg" disabled>חשב</button>
+                    <button id="calculateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 disabled:bg-gray-400 text-lg" disabled>חישוב</button>
                 </div>
                 <div id="personalResult" class="mt-8 hidden text-center">
                     <div id="summary" class="mb-8"></div>
@@ -144,11 +143,11 @@
                 <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6 text-blue-700">השוואה לאורך זמן</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
-                        <label for="areaSelectTimeline" class="block mb-2 text-sm font-medium text-gray-900">בחר אזור מגורים:</label>
+                        <label for="areaSelectTimeline" class="block mb-2 text-sm font-medium text-gray-900">אזור מגורים:</label>
                         <select id="areaSelectTimeline" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></select>
                     </div>
                     <div>
-                        <label for="houseTypeSelectTimeline" class="block mb-2 text-sm font-medium text-gray-900">בחר סוג בית:</label>
+                        <label for="houseTypeSelectTimeline" class="block mb-2 text-sm font-medium text-gray-900">סוג בית:</label>
                         <select id="houseTypeSelectTimeline" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled></select>
                     </div>
                 </div>
@@ -162,7 +161,7 @@
                 <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6 text-blue-700">ניתוח אחוז עליית המחירים</h2>
                 <div class="space-y-4">
                     <div class="flex justify-center flex-wrap gap-4">
-                        <h3 class="w-full text-center text-lg font-medium text-gray-700">בחר קבוצת גיל להצגה:</h3>
+                        <h3 class="w-full text-center text-lg font-medium text-gray-700">קבוצת גיל להצגה:</h3>
                         <input type="radio" name="age_group_option" id="age_opt_30" value="30_MINUS" class="hidden">
                         <label for="age_opt_30" class="radio-label">30 ומטה</label>
                         <input type="radio" name="age_group_option" id="age_opt_37" value="31-37" class="hidden">
@@ -171,7 +170,7 @@
                         <label for="age_opt_38" class="radio-label">38 ומעלה</label>
                     </div>
                     <div class="flex justify-center flex-wrap gap-4 pt-4 border-t">
-                         <h3 class="w-full text-center text-lg font-medium text-gray-700">בחר סוג השוואה:</h3>
+                         <h3 class="w-full text-center text-lg font-medium text-gray-700">יש לבחור סוג השוואה:</h3>
                         <input type="radio" name="increase_option" id="opt1" value="2022_2025_orig" class="hidden">
                         <label for="opt1" class="radio-label">2022-2025 (הסדר ישן)</label>
                         <input type="radio" name="increase_option" id="opt2" value="2024_2025_orig" class="hidden">
@@ -189,7 +188,7 @@
             <div id="data-tables" class="tab-content hidden bg-white p-4 md:p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6 text-blue-700">טבלאות נתוני הדיור</h2>
                  <div class="text-center mb-4">
-                    <a href="https://docs.google.com/spreadsheets/d/1LWmOBxmxPEYQj5lGNCRx8I4CDRPOvr80fLCrM8ZnMGg/edit?usp=sharing" target="_blank" class="text-blue-600 hover:underline font-semibold">פתח את הטבלה בחלון חדש</a>
+                    <a href="https://docs.google.com/spreadsheets/d/1LWmOBxmxPEYQj5lGNCRx8I4CDRPOvr80fLCrM8ZnMGg/edit?usp=sharing" target="_blank" class="text-blue-600 hover:underline font-semibold">לצפיה בגוגל שיטס</a>
                 </div>
                 <div class="w-full h-[70vh] border rounded-lg overflow-auto bg-gray-200">
                     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSi61V2wvUaObN0L3_dsQWfxgO5oIoFLYvrDXzixK58SJzqvWhCj3r4W7ngH_X-_Qp5iSOZL-h87j9k/pubhtml?widget=true&amp;headers=false" class="w-full h-full min-w-[800px]"></iframe>
@@ -411,13 +410,13 @@
         const summaryDiv = document.getElementById('summary');
 
         function populateCalcAreaSelect() {
-            areaSelectCalc.innerHTML = '<option selected disabled>בחר...</option>';
+            areaSelectCalc.innerHTML = '<option selected disabled>בחירה...</option>';
             allAreas.forEach(area => areaSelectCalc.add(new Option(area, area)));
         }
 
         areaSelectCalc.addEventListener('change', () => {
             const selectedArea = areaSelectCalc.value;
-            houseTypeSelectCalc.innerHTML = '<option selected disabled>בחר...</option>';
+            houseTypeSelectCalc.innerHTML = '<option selected disabled>בחירה...</option>';
             allHouseTypesByArea[selectedArea].forEach(type => houseTypeSelectCalc.add(new Option(type, type)));
             houseTypeSelectCalc.disabled = false;
         });
@@ -441,7 +440,7 @@
                 sqmInputCalc.value = selectedHouse.sqm;
             } else {
                 sqmInputCalc.value = '';
-                sqmInputCalc.placeholder = 'שטח לא נמצא, הזן ידנית';
+                sqmInputCalc.placeholder = 'שטח לא נמצא, בבקשה להזין ידנית';
             }
             checkCalcButtonState();
         });
@@ -559,12 +558,12 @@
             // Timeline Tab Selects
             const areaSelectTimeline = document.getElementById('areaSelectTimeline');
             const houseTypeSelectTimeline = document.getElementById('houseTypeSelectTimeline');
-            areaSelectTimeline.innerHTML = '<option selected disabled>בחר...</option>';
+            areaSelectTimeline.innerHTML = '<option selected disabled>בחירה...</option>';
             allAreas.forEach(area => areaSelectTimeline.add(new Option(area, area)));
             
             areaSelectTimeline.addEventListener('change', () => {
                 const selectedArea = areaSelectTimeline.value;
-                houseTypeSelectTimeline.innerHTML = '<option selected disabled>בחר...</option>';
+                houseTypeSelectTimeline.innerHTML = '<option selected disabled>בחירה...</option>';
                 allHouseTypesByArea[selectedArea].forEach(type => houseTypeSelectTimeline.add(new Option(type, type)));
                 houseTypeSelectTimeline.disabled = false;
                 updateTimelineChart(null, null);
