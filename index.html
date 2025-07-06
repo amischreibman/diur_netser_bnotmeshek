@@ -180,7 +180,7 @@
                         <label for="opt3" class="radio-label">2024-2025 (הסדר מעודכן)</label>
                     </div>
                 </div>
-                <div class="chart-container mt-6">
+                <div class="chart-container mt-6 h-[80vh] md:h-[55vh]">
                     <canvas id="priceIncreaseChart"></canvas>
                 </div>
             </div>
@@ -188,8 +188,11 @@
             <!-- Data Tables Tab -->
             <div id="data-tables" class="tab-content hidden bg-white p-4 md:p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6 text-blue-700">טבלאות נתוני הדיור</h2>
-                <div class="w-full h-[70vh] border rounded-lg overflow-hidden bg-gray-200">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSi61V2wvUaObN0L3_dsQWfxgO5oIoFLYvrDXzixK58SJzqvWhCj3r4W7ngH_X-_Qp5iSOZL-h87j9k/pubhtml?widget=true&amp;headers=false" class="w-full h-full"></iframe>
+                 <div class="text-center mb-4">
+                    <a href="https://docs.google.com/spreadsheets/d/1LWmOBxmxPEYQj5lGNCRx8I4CDRPOvr80fLCrM8ZnMGg/edit?usp=sharing" target="_blank" class="text-blue-600 hover:underline font-semibold">פתח את הטבלה בחלון חדש</a>
+                </div>
+                <div class="w-full h-[70vh] border rounded-lg overflow-auto bg-gray-200">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSi61V2wvUaObN0L3_dsQWfxgO5oIoFLYvrDXzixK58SJzqvWhCj3r4W7ngH_X-_Qp5iSOZL-h87j9k/pubhtml?widget=true&amp;headers=false" class="w-full h-full min-w-[800px]"></iframe>
                 </div>
             </div>
         </main>
@@ -206,7 +209,7 @@
                 { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 1800, price2023: 2200, price2024: 2600, price2025_old: 2600, price2025_new: 2700 },
                 { area: 'סדנה/נוער', type: 'דירת סדנה', sqm: 60.5, price2022: 1750, price2023: 2400, price2024: 3100, price2025_old: 3800, price2025_new: 4600 },
                 { area: 'סדנה/נוער', type: 'דירת 3 חדרים', sqm: 80, price2022: null, price2023: null, price2024: null, price2025_old: null, price2025_new: 4900 },
-                { area: 'סדנה/נוער', type: 'דירת נוער מורחבת (4.5 חדרים)', sqm: 71, price2022: 1850, price2023: 2400, price2024: 3000, price2025_old: 3700, price2025_new: 4900 },
+                { area: 'סדנה/נוער', type: 'דירת נוער (מורחבת 4.5 חדרים)', sqm: 71, price2022: 1850, price2023: 2400, price2024: 3000, price2025_old: 3700, price2025_new: 4900 },
                 { area: 'קרווילות', type: 'קרווילה קטנה', sqm: 88, price2022: 1850, price2023: 2400, price2024: 3000, price2025_old: 3700, price2025_new: 4600 },
                 { area: 'קרווילות', type: 'קרווילה גדולה', sqm: 65.5, price2022: 1400, price2023: 2300, price2024: 3300, price2025_old: 4300, price2025_new: 5900 },
                 { area: 'קרווילות', type: 'קרווילה קטנה מורחבת', sqm: 80, price2022: 2400, price2023: 3100, price2024: 3800, price2025_old: 4600, price2025_new: 5900 },
@@ -393,7 +396,7 @@
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: { r: { ticks: { backdropColor: 'transparent', callback: value => value.toFixed(0) + '%' }, grid: { color: 'rgba(0, 0, 0, 0.1)' } } },
-                    plugins: { legend: { position: 'right', align: 'center' }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw.toFixed(2)}%` } } }
+                    plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw.toFixed(2)}%` } } }
                 }
             });
         }
