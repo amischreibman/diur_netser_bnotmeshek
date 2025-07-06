@@ -494,8 +494,8 @@
             }
 
             summaryDiv.innerHTML = `
-                <p class="text-xl text-gray-600">המחיר לפי ההסדר הישן (תעריף 2025): <span class="font-bold text-blue-600">₪${price2025old.toLocaleString()}</span></p>
-                <p class="text-xl text-gray-600 mt-2">המחיר לפי ההסדר החדש (2025) הוא:</p>
+                <p class="text-xl text-gray-600">המחיר החל מספטמבר 25 לפי ההסדר הקיים: <span class="font-bold text-blue-600">₪${price2025old.toLocaleString()}</span></p>
+                <p class="text-xl text-gray-600 mt-2">המחיר החל מספטמבר 25 לפי ההסדר המוצע:</p>
                 <p class="summary-value summary-value-bad">₪${newTotalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                 <p class="text-sm text-gray-500">(₪${price2025new_base.toLocaleString()} שכירות + ₪${arnona.toFixed(2)} ארנונה)</p>
                 <p class="text-2xl font-bold mt-4">התייקרות של <span class="text-red-500">${increasePercentage.toFixed(2)}%</span></p>
