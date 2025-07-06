@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>השוואת מחירי דיור אינטראקטיבית</title>
+    <title>מחשבון מחירי דיור אינטראקטיבי</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,307 +15,452 @@
         }
         .chart-container {
             position: relative;
-            height: 40vh;
+            height: 45vh;
             width: 100%;
         }
-        .tab-btn {
+        .main-tab-btn, .tab-btn {
             transition: all 0.3s ease;
+        }
+        .main-tab-btn.active {
+            background-color: #1D4ED8; /* blue-700 */
+            color: white;
+            border-color: #1D4ED8;
         }
         .tab-btn.active {
             background-color: #1E40AF; /* bg-blue-800 */
             color: white;
             font-weight: 700;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
-        .price-original { color: #16A34A; /* text-green-600 */ font-weight: 600; }
-        .price-new { color: #DC2626; /* text-red-600 */ font-weight: 600; }
+        .price-original { color: #16A34A; font-weight: 600; }
+        .price-new { color: #DC2626; font-weight: 600; }
+        .price-cpi { color: #2563EB; font-weight: 600; }
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-blue-900">השוואת מחירי דיור</h1>
-            <p class="text-lg text-gray-600 mt-2">ניתוח השוואתי בין ההסכם המקורי להצעה החדשה</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-900">ניתוח והשוואת מחירי דיור</h1>
         </header>
 
-        <!-- Controls -->
-        <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-8">
-            <!-- Location Tabs -->
-            <div class="flex justify-center bg-gray-200 rounded-full p-1 shadow-inner">
-                <button id="btn-location-בקעה" class="tab-btn location-btn w-full md:w-auto px-6 py-2 rounded-full text-lg" data-location="בקעה">בקעה</button>
-                <button id="btn-location-שטח המחנה" class="tab-btn location-btn w-full md:w-auto px-6 py-2 rounded-full text-lg" data-location="שטח המחנה">שטח המחנה</button>
+        <!-- Main Tabs -->
+        <div class="mb-8 border-b border-gray-300">
+            <nav class="flex -mb-px" aria-label="Tabs">
+                <button class="main-tab-btn whitespace-nowrap py-4 px-6 border-b-2 font-medium text-lg" data-tab="calculator">מחשבון אישי</button>
+                <button class="main-tab-btn whitespace-nowrap py-4 px-6 border-b-2 font-medium text-lg" data-tab="general">תצוגה כללית</button>
+            </nav>
+        </div>
+
+        <!-- Calculator View -->
+        <div id="calculator-view" class="tab-content">
+            <p class="text-lg text-gray-600 text-center mb-6">הזן את פרטיך וקבל תחזית מחירים מותאמת אישית</p>
+             <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div class="md:col-span-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">1. בחר קטגוריה:</label>
+                        <select id="category-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="בקעה">בקעה</option>
+                            <option value="קרווילות">קרווילות</option>
+                            <option value="סדנא/נוער">סדנא/נוער</option>
+                            <option value="מחנה">דירות במחנה</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label for="apartment-select" class="block text-sm font-medium text-gray-700 mb-1">2. בחר סוג דירה:</label>
+                        <select id="apartment-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"></select>
+                    </div>
+                    <div class="md:col-span-1">
+                         <label for="age-input" class="block text-sm font-medium text-gray-700 mb-1">3. הזן גיל:</label>
+                        <input type="number" id="age-input" placeholder="לדוגמה: 32" class="mt-1 block w-full pl-3 pr-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    </div>
+                    <div class="md:col-span-1">
+                        <button id="calculate-btn" class="w-full bg-blue-700 text-white font-bold py-2.5 px-4 rounded-md hover:bg-blue-800 transition">חשב</button>
+                    </div>
+                </div>
             </div>
-            <!-- Age Group Tabs -->
-            <div class="flex justify-center bg-gray-200 rounded-full p-1 shadow-inner">
-                <button class="tab-btn age-btn px-4 py-2 rounded-full" data-age="עד גיל 30">עד גיל 30</button>
-                <button class="tab-btn age-btn px-4 py-2 rounded-full" data-age="30-37">גילאי 30-37</button>
-                <button class="tab-btn age-btn px-4 py-2 rounded-full" data-age="תושבים וגילאי 38 ומעלה">38+ ותושבים</button>
+            <div id="calculator-results-area" class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg hidden">
+                <h2 id="calculator-chart-title" class="text-2xl font-bold text-center mb-6 text-blue-800"></h2>
+                <div class="chart-container mb-8"><canvas id="calculatorPriceChart"></canvas></div>
+                <div class="table-responsive">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">סוג דירה</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 24</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 25</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 26</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ארנונה</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calculator-price-table-body" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="calculator-initial-message" class="text-center p-10 bg-white rounded-2xl shadow-lg">
+                <p class="text-xl text-gray-600">אנא מלא את הפרטים במחשבון כדי לראות את התוצאות האישיות שלך.</p>
             </div>
         </div>
 
-        <!-- Content Area -->
-        <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
-            <h2 id="chart-title" class="text-2xl font-bold text-center mb-6 text-blue-800"></h2>
-            
-            <!-- Chart -->
-            <div class="chart-container mb-8">
-                <canvas id="priceChart"></canvas>
+        <!-- General View -->
+        <div id="general-view" class="tab-content hidden">
+             <p class="text-lg text-gray-600 text-center mb-6">הצגת נתונים כללית לפי קבוצות גיל ואזורים</p>
+             <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-8">
+                <div class="flex justify-center bg-gray-200 rounded-full p-1 shadow-inner">
+                    <button class="tab-btn location-btn-general w-full md:w-auto px-6 py-2 rounded-full text-lg" data-location="בקעה">בקעה</button>
+                    <button class="tab-btn location-btn-general w-full md:w-auto px-6 py-2 rounded-full text-lg" data-location="שטח המחנה">שטח המחנה</button>
+                </div>
+                <div class="flex justify-center bg-gray-200 rounded-full p-1 shadow-inner">
+                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="עד גיל 30">עד גיל 30</button>
+                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="30-37">גילאי 30-37</button>
+                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="תושבים וגילאי 38 ומעלה">38+ ותושבים</button>
+                </div>
             </div>
-
-            <!-- Table -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">סוג דירה</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ספט' 24</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ספט' 25</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ספט' 26</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ארנונה חודשית</th>
-                        </tr>
-                    </thead>
-                    <tbody id="price-table-body" class="bg-white divide-y divide-gray-200">
-                        <!-- Rows will be injected by JS -->
-                    </tbody>
-                </table>
+            <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 id="general-chart-title" class="text-2xl font-bold text-center mb-6 text-blue-800"></h2>
+                <div class="chart-container mb-8"><canvas id="generalPriceChart"></canvas></div>
+                <div class="table-responsive">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                             <tr>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">סוג דירה</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 24</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 25</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 26</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ארנונה</th>
+                            </tr>
+                        </thead>
+                        <tbody id="general-price-table-body" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <p class="text-xs text-center text-gray-500 mt-6">
+            <strong>מקרא:</strong>
+            <span class="price-original">הסכם מקורי</span> |
+            <span class="price-new">הצעה חדשה</span> |
+            <span class="price-cpi">הצמדה למדד</span>
+        </p>
     </div>
 
     <script>
-        // --- Data Structure ---
-        // This object holds all the price data extracted from the provided files.
-        const priceData = {
+        // --- Data & CPI Calculation ---
+        const cpiIncrease22_24 = 1.0483; // (102.1 / 97.4)
+        const cpiIncrease22_26 = 1.0989; // (102.1 / 97.4) * (102.1 / 97.4) - Projected
+
+        const allPriceData = {
             'בקעה': {
                 'עד גיל 30': [
-                    { type: 'דמי הרשאה/דירות גן 2 חדרים', original: { '24': 1000, '25': 1000, '26': 1000 }, new: { '25': 1110, '26': 1220 }, arnona: 80 },
-                    { type: 'דירות גן 3 חדרים', original: { '24': 2000, '25': 2000, '26': 2000 }, new: { '25': 1148, '26': 1296 }, arnona: 98 },
-                    { type: 'קרווילה: יח\' הורים+סלון+2 חדרים', original: { '24': 2200, '25': 2200, '26': 2200 }, new: { '25': 2135, '26': 2270 }, arnona: 135 },
-                    { type: 'קרווילה: יח\' הורים+סלון+חדר', original: { '24': 2600, '25': 2600, '26': 2600 }, new: { '25': 2354, '26': 2508 }, arnona: 154 },
+                    { type: 'רכבות אמצע/פינה, בית חיילים', original: { '22': 850, '23': 900, '24': 1000, '25': 1000 }, new: { '25': 1126, '26': 1252 }, arnona: 76 },
+                    { type: 'רכבות חדר כפול', original: { '22': 1500, '23': 1700, '24': 2000, '25': 2000 }, new: { '25': 2135, '26': 2270 }, arnona: 135 },
+                    { type: 'דירת צד', original: { '22': 1600, '23': 1900, '24': 2200, '25': 2200 }, new: { '25': 2354, '26': 2508 }, arnona: 154 },
+                    { type: 'דירת צד מורחבת', original: { '22': 1800, '23': 2200, '24': 2600, '25': 2600 }, new: { '25': 2805, '26': 3010 }, arnona: 205 },
                 ],
                 '30-37': [
-                    { type: 'דמי הרשאה/דירות גן 2 חדרים', original: { '24': 1600, '25': 1600, '26': 1600 }, new: { '25': 1700, '26': 1800 }, arnona: 80 },
-                    { type: 'דירות גן 3 חדרים', original: { '24': 2400, '25': 2400, '26': 2400 }, new: { '25': 2200, '26': 2400 }, arnona: 98 },
-                    { type: 'קרווילה: יח\' הורים+סלון+2 חדרים', original: { '24': 2600, '25': 2600, '26': 2600 }, new: { '25': 2600, '26': 2800 }, arnona: 135 },
-                    { type: 'קרווילה: יח\' הורים+סלון+חדר', original: { '24': 3300, '25': 3300, '26': 3300 }, new: { '25': 2800, '26': 3000 }, arnona: 154 },
+                    { type: 'רכבות אמצע/פינה, בית חיילים', original: { '22': 1350, '23': 1400, '24': 1600, '25': 1600 }, new: { '25': 1700, '26': 1800 }, arnona: 76 },
+                    { type: 'רכבות חדר כפול', original: { '22': 2050, '23': 2200, '24': 2400, '25': 2400 }, new: { '25': 2600, '26': 2800 }, arnona: 135 },
+                    { type: 'דירת צד', original: { '22': 2200, '23': 2400, '24': 2600, '25': 2600 }, new: { '25': 2800, '26': 3000 }, arnona: 154 },
+                    { type: 'דירת צד מורחבת', original: { '22': 2400, '23': 2800, '24': 3300, '25': 3300 }, new: { '25': 3600, '26': 3900 }, arnona: 205 },
                 ],
                 'תושבים וגילאי 38 ומעלה': [
-                    { type: 'דמי הרשאה/דירות גן 2 חדרים', original: { '24': 2100, '25': 2100, '26': 2100 }, new: { '25': 2200, '26': 2300 }, arnona: 80 },
-                    { type: 'דירות גן 3 חדרים', original: { '24': 3500, '25': 3500, '26': 3500 }, new: { '25': 2700, '26': 2900 }, arnona: 98 },
-                    { type: 'קרווילה: יח\' הורים+סלון+2 חדרים', original: { '24': 3800, '25': 3800, '26': 3800 }, new: { '25': 3100, '26': 3300 }, arnona: 135 },
-                    { type: 'קרווילה: יח\' הורים+סלון+חדר', original: { '24': 4500, '25': 4500, '26': 4500 }, new: { '25': 3400, '26': 3700 }, arnona: 154 },
+                    { type: 'רכבות אמצע/פינה', original: { '22': 1700, '23': 1800, '24': 2100, '25': 2100 }, new: { '25': 2200, '26': 2300 }, arnona: 76 },
+                    { type: 'בית חיילים', original: { '22': 2000, '23': 2000, '24': 2100, '25': 2100 }, new: { '25': 2200, '26': 2300 }, arnona: 80 },
+                    { type: 'רכבות חדר כפול', original: { '22': 3300, '23': 3300, '24': 3500, '25': 3500 }, new: { '25': 3700, '26': 3900 }, arnona: 135 },
+                    { type: 'דירת צד', original: { '22': 3600, '23': 3600, '24': 3800, '25': 3800 }, new: { '25': 4100, '26': 4400 }, arnona: 154 },
+                    { type: 'דירת צד מורחבת', original: { '22': 4300, '23': 4300, '24': 4500, '25': 4500 }, new: { '25': 4900, '26': 5300 }, arnona: 205 },
                 ]
             },
             'שטח המחנה': {
-                'עד גיל 30': [
-                    { type: 'דירת נוער/סדנה/גדולה', original: { '24': 3100, '25': 3100, '26': 3100 }, new: { '25': 3317, '26': 3534 }, arnona: 217 },
-                    { type: 'דירה מורחבת/קטנה', original: { '24': 3000, '25': 3000, '26': 3000 }, new: { '25': 3186, '26': 3372 }, arnona: 286 },
-                    { type: 'קרווילה מורחבת', original: { '24': 3800, '25': 3800, '26': 3800 }, new: { '25': 4085, '26': 4370 }, arnona: 285 },
-                    { type: 'קרווילה מורחבת פלוס', original: { '24': 4200, '25': 4200, '26': 4200 }, new: { '25': 4515, '26': 4830 }, arnona: 315 },
+                 'עד גיל 30': [
+                    { type: 'דירת נוער/סדנה', category: 'סדנא/נוער', original: { '22': 1750, '23': 2400, '24': 3100, '25': 3100 }, new: { '25': 3317, '26': 3534 }, arnona: 217 },
+                    { type: 'דירה מורחבת/קטנה', category: 'מחנה', original: { '22': 1850, '23': 2400, '24': 3000, '25': 3000 }, new: { '25': 3186, '26': 3372 }, arnona: 286 },
+                    { type: 'דירה גדולה קרווילות', category: 'קרווילות', original: { '22': 1400, '23': 2300, '24': 3300, '25': 3300 }, new: { '25': 3515, '26': 3726 }, arnona: 236 },
+                    { type: 'קרווילה מורחבת', category: 'קרווילות', original: { '22': 2400, '23': 3100, '24': 3800, '25': 3800 }, new: { '25': 4085, '26': 4370 }, arnona: 285 },
+                    { type: 'קרווילה מורחבת פלוס', category: 'קרווילות', original: { '22': 2750, '23': 3400, '24': 4200, '25': 4200 }, new: { '25': 4515, '26': 4830 }, arnona: 315 },
+                    { type: 'דירת 2 חדרים', category: 'מחנה', original: { '22': 1450, '23': 1800, '24': 2200, '25': 2200 }, new: { '25': 2354, '26': 2508 }, arnona: 154 },
+                    { type: 'דירת 3 חדרים', category: 'מחנה', original: { '22': 1850, '23': 2600, '24': 3400, '25': 3400 }, new: { '25': 3656, '26': 3912 }, arnona: 236 },
+                    { type: 'דירת 4 חדרים', category: 'מחנה', original: { '22': 2100, '23': 2800, '24': 3600, '25': 3600 }, new: { '25': 3875, '26': 4150 }, arnona: 252 },
+                    { type: 'דירת 5 חדרים', category: 'מחנה', original: { '22': 2450, '23': 3200, '24': 4000, '25': 4000 }, new: { '25': 4306, '26': 4612 }, arnona: 280 },
+                    { type: 'דירת 6 חדרים', category: 'מחנה', original: { '22': 2550, '23': 3500, '24': 4500, '25': 4500 }, new: { '25': 4844, '26': 5188 }, arnona: 320 },
                 ],
                 '30-37': [
-                    { type: 'דירת נוער/סדנה/גדולה', original: { '24': 3400, '25': 3400, '26': 3400 }, new: { '25': 3700, '26': 4000 }, arnona: 217 },
-                    { type: 'דירה מורחבת/קטנה', original: { '24': 3400, '25': 3400, '26': 3400 }, new: { '25': 3600, '26': 3800 }, arnona: 286 },
-                    { type: 'קרווילה מורחבת', original: { '24': 4100, '25': 4100, '26': 4100 }, new: { '25': 4500, '26': 4900 }, arnona: 285 },
-                    { type: 'קרווילה מורחבת פלוס', original: { '24': 4500, '25': 4500, '26': 4500 }, new: { '25': 4900, '26': 5300 }, arnona: 315 },
+                    { type: 'דירת נוער/סדנה', category: 'סדנא/נוער', original: { '22': 2600, '23': 2900, '24': 3400, '25': 3400 }, new: { '25': 3700, '26': 4000 }, arnona: 217 },
+                    { type: 'דירה מורחבת/קטנה', category: 'מחנה', original: { '22': 2800, '23': 3000, '24': 3400, '25': 3400 }, new: { '25': 3600, '26': 3800 }, arnona: 286 },
+                    { type: 'דירה גדולה קרווילות', category: 'קרווילות', original: { '22': 2950, '23': 3300, '24': 3800, '25': 3800 }, new: { '25': 4100, '26': 4400 }, arnona: 236 },
+                    { type: 'קרווילה מורחבת', category: 'קרווילות', original: { '22': 3300, '23': 3700, '24': 4100, '25': 4100 }, new: { '25': 4500, '26': 4900 }, arnona: 285 },
+                    { type: 'קרווילה מורחבת פלוס', category: 'קרווילות', original: { '22': 3700, '23': 4100, '24': 4500, '25': 4500 }, new: { '25': 4900, '26': 5300 }, arnona: 315 },
+                    { type: 'דירת 2 חדרים', category: 'מחנה', original: { '22': 2200, '23': 2300, '24': 2500, '25': 2500 }, new: { '25': 2700, '26': 2900 }, arnona: 154 },
+                    { type: 'דירת 3 חדרים', category: 'מחנה', original: { '22': 2800, '23': 3200, '24': 3700, '25': 3700 }, new: { '25': 4000, '26': 4300 }, arnona: 236 },
+                    { type: 'דירת 4 חדרים', category: 'מחנה', original: { '22': 2950, '23': 3400, '24': 3900, '25': 3900 }, new: { '25': 4200, '26': 4500 }, arnona: 252 },
+                    { type: 'דירת 5 חדרים', category: 'מחנה', original: { '22': 3700, '23': 4000, '24': 4400, '25': 4400 }, new: { '25': 4800, '26': 5200 }, arnona: 280 },
+                    { type: 'דירת 6 חדרים', category: 'מחנה', original: { '22': 3600, '23': 4200, '24': 4800, '25': 4800 }, new: { '25': 5200, '26': 5600 }, arnona: 320 },
                 ],
                 'תושבים וגילאי 38 ומעלה': [
-                    { type: 'דירת נוער/סדנה/גדולה', original: { '24': 4800, '25': 4800, '26': 4800 }, new: { '25': 5200, '26': 5600 }, arnona: 217 },
-                    { type: 'דירה מורחבת/קטנה', original: { '24': 4700, '25': 4700, '26': 4700 }, new: { '25': 5100, '26': 5500 }, arnona: 286 },
-                    { type: 'קרווילה מורחבת', original: { '24': 5600, '25': 5600, '26': 5600 }, new: { '25': 6100, '26': 6600 }, arnona: 285 },
-                    { type: 'קרווילה מורחבת פלוס', original: { '24': 6000, '25': 6000, '26': 6000 }, new: { '25': 6500, '26': 7000 }, arnona: 315 },
+                    { type: 'דירת נוער/סדנה', category: 'סדנא/נוער', original: { '22': 4800, '23': 4800, '24': 4800, '25': 4800 }, new: { '25': 5200, '26': 5600 }, arnona: 217 },
+                    { type: 'דירה מורחבת/קטנה', category: 'מחנה', original: { '22': 4700, '23': 4700, '24': 4700, '25': 4700 }, new: { '25': 5100, '26': 5500 }, arnona: 286 },
+                    { type: 'דירה גדולה קרווילות', category: 'קרווילות', original: { '22': 5300, '23': 5300, '24': 5300, '25': 5300 }, new: { '25': 5700, '26': 6200 }, arnona: 236 },
+                    { type: 'קרווילה מורחבת', category: 'קרווילות', original: { '22': 5600, '23': 5600, '24': 5600, '25': 5600 }, new: { '25': 6100, '26': 6600 }, arnona: 285 },
+                    { type: 'קרווילה מורחבת פלוס', category: 'קרווילות', original: { '22': 6000, '23': 6000, '24': 6000, '25': 6000 }, new: { '25': 6500, '26': 7000 }, arnona: 315 },
+                    { type: 'דירת 2 חדרים', category: 'מחנה', original: { '22': 3500, '23': 3500, '24': 3500, '25': 3500 }, new: { '25': 3800, '26': 4100 }, arnona: 154 },
+                    { type: 'דירת 3 חדרים', category: 'מחנה', original: { '22': 5200, '23': 5200, '24': 5200, '25': 5200 }, new: { '25': 5600, '26': 6000 }, arnona: 236 },
+                    { type: 'דירת 4 חדרים', category: 'מחנה', original: { '22': 5400, '23': 5400, '24': 5400, '25': 5400 }, new: { '25': 5800, '26': 6200 }, arnona: 252 },
+                    { type: 'דירת 5 חדרים', category: 'מחנה', original: { '22': 5800, '23': 5800, '24': 5800, '25': 5800 }, new: { '25': 6300, '26': 6800 }, arnona: 280 },
+                    { type: 'דירת 6 חדרים', category: 'מחנה', original: { '22': 6500, '23': 6500, '24': 6500, '25': 6500 }, new: { '25': 7000, '26': 7500 }, arnona: 320 },
                 ]
             }
         };
 
-        // --- State Management ---
-        let currentChart = null;
-        let currentState = {
-            location: 'בקעה',
-            age: 'עד גיל 30'
-        };
+        // --- Setup & State ---
+        Object.values(allPriceData).forEach(loc => Object.values(loc).forEach(ageG => ageG.forEach(item => {
+            if (!item.category) item.category = 'בקעה'; // Assign default category for 'בקעה'
+            item.cpi = {
+                '24': Math.round(item.original['22'] * cpiIncrease22_24),
+                '26': Math.round(item.original['22'] * cpiIncrease22_26)
+            };
+        })));
+
+        let calculatorChart = null;
+        let generalChart = null;
+        let calculatorState = { category: 'בקעה' };
+        let generalState = { location: 'בקעה', age: 'עד גיל 30' };
 
         // --- DOM Elements ---
-        const tableBody = document.getElementById('price-table-body');
-        const chartTitle = document.getElementById('chart-title');
-        const ctx = document.getElementById('priceChart').getContext('2d');
+        const mainTabs = document.querySelectorAll('.main-tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Calculator elements
+        const categorySelect = document.getElementById('category-select');
+        const apartmentSelect = document.getElementById('apartment-select');
+        const ageInput = document.getElementById('age-input');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const calculatorResultsArea = document.getElementById('calculator-results-area');
+        const calculatorInitialMessage = document.getElementById('calculator-initial-message');
+        const calculatorTableBody = document.getElementById('calculator-price-table-body');
+        const calculatorChartTitle = document.getElementById('calculator-chart-title');
+        const calculatorCtx = document.getElementById('calculatorPriceChart').getContext('2d');
+
+        // General view elements
+        const generalTableBody = document.getElementById('general-price-table-body');
+        const generalChartTitle = document.getElementById('general-chart-title');
+        const generalCtx = document.getElementById('generalPriceChart').getContext('2d');
 
         // --- Functions ---
-
-        /**
-         * Calculates the average price for a given dataset and year.
-         * @param {Array} data - The array of apartment data.
-         * @param {String} year - The year to calculate for ('24', '25', '26').
-         * @param {String} type - 'original' or 'new'.
-         * @returns {Number} The average price.
-         */
-        function getAveragePrice(data, year, type) {
-            if (!data || data.length === 0) return 0;
-            const total = data.reduce((sum, item) => sum + item[type][year], 0);
-            return Math.round(total / data.length);
-        }
-        
-        /**
-         * Renders the data table based on the current state.
-         * @param {Array} data - The array of apartment data for the current selection.
-         */
-        function renderTable(data) {
-            tableBody.innerHTML = '';
-            if (!data || data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-8 text-gray-500">לא נמצאו נתונים לבחירה זו.</td></tr>';
-                return;
-            }
-            data.forEach(item => {
-                const row = `
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.type}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">${item.original['24'].toLocaleString()} ₪</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                            <span class="price-original">${item.original['25'].toLocaleString()} ₪</span> / <span class="price-new">${item.new['25'].toLocaleString()} ₪</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                            <span class="price-original">${item.original['26'].toLocaleString()} ₪</span> / <span class="price-new">${item.new['26'].toLocaleString()} ₪</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">${item.arnona.toLocaleString()} ₪</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
+        function switchMainTab(tabName) {
+            tabContents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(`${tabName}-view`).classList.remove('hidden');
+            mainTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
+                tab.classList.toggle('border-blue-700', tab.dataset.tab === tabName);
             });
         }
 
-        /**
-         * Renders the chart based on the current state.
-         * @param {Array} data - The array of apartment data for the current selection.
-         */
-        function renderChart(data) {
-            if (currentChart) {
-                currentChart.destroy();
+        function getAgeGroup(age) {
+            if (!age || age <= 0) return null;
+            if (age <= 30) return 'עד גיל 30';
+            if (age >= 31 && age <= 37) return '30-37';
+            return 'תושבים וגילאי 38 ומעלה';
+        }
+
+        // --- Calculator Functions ---
+        function populateApartmentSelect() {
+            const category = categorySelect.value;
+            const apartmentTypes = new Set();
+            Object.values(allPriceData).forEach(location => {
+                Object.values(location).forEach(ageGroup => {
+                    ageGroup.forEach(item => {
+                        if (item.category === category) {
+                            apartmentTypes.add(item.type);
+                        }
+                    });
+                });
+            });
+            apartmentSelect.innerHTML = '<option value="" disabled selected>בחר סוג דירה</option>';
+            [...apartmentTypes].sort().forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                apartmentSelect.appendChild(option);
+            });
+        }
+        
+        function renderCalculatorTable(item) {
+            calculatorTableBody.innerHTML = !item ? '' : `
+                <tr class="bg-blue-50">
+                    <td class="px-4 py-4 text-sm font-medium text-gray-900">${item.type}</td>
+                    <td class="px-4 py-4 text-sm text-center">
+                        <span class="price-original">${item.original['24'].toLocaleString()} ₪</span> / 
+                        <span class="price-cpi">${item.cpi['24'].toLocaleString()} ₪</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-center">
+                        <span class="price-original">${item.original['25'].toLocaleString()} ₪</span> / 
+                        <span class="price-new">${item.new['25'].toLocaleString()} ₪</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-center">
+                        <span class="price-new">${item.new['26'].toLocaleString()} ₪</span> /
+                        <span class="price-cpi">${item.cpi['26'].toLocaleString()} ₪</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-center text-gray-500">${item.arnona.toLocaleString()} ₪</td>
+                </tr>`;
+        }
+
+        function renderCalculatorChart(item) {
+            if (calculatorChart) calculatorChart.destroy();
+            if (!item) return;
+            
+            const labels = ['ספט\' 22', 'ספט\' 23', 'ספט\' 24', 'ספט\' 25', 'ספט\' 26'];
+            const chartData = {
+                labels,
+                datasets: [
+                    { label: 'הסכם מקורי', data: [item.original['22'], item.original['23'], item.original['24'], item.original['25'], null], borderColor: '#16A34A', fill: false, tension: 0.1, spanGaps: true },
+                    { label: 'הצעה חדשה', data: [null, null, null, item.new['25'], item.new['26']], borderColor: '#DC2626', fill: false, tension: 0.1 },
+                    { label: 'הצמדה למדד', data: [item.original['22'], null, item.cpi['24'], null, item.cpi['26']], borderColor: '#2563EB', fill: false, tension: 0.1, spanGaps: true, borderDash: [5, 5] }
+                ]
+            };
+            calculatorChart = new Chart(calculatorCtx, { type: 'line', data: chartData, options: getChartOptions() });
+        }
+
+        function handleCalculation() {
+            const age = parseInt(ageInput.value, 10);
+            const apartmentType = apartmentSelect.value;
+            if (!age || !apartmentType) {
+                alert('אנא מלא את כל הפרטים: קטגוריה, סוג דירה וגיל.');
+                return;
             }
+            const ageGroup = getAgeGroup(age);
             
-            const labels = ['ספט\' 24', 'ספט\' 25', 'ספט\' 26'];
+            let relevantData = null;
+            Object.values(allPriceData).forEach(location => {
+                if (location[ageGroup]) {
+                    const found = location[ageGroup].find(item => item.type === apartmentType);
+                    if (found) relevantData = found;
+                }
+            });
+
+            if (relevantData) {
+                calculatorResultsArea.classList.remove('hidden');
+                calculatorInitialMessage.classList.add('hidden');
+                calculatorChartTitle.textContent = `תחזית אישית: ${apartmentType} (גיל ${age})`;
+                renderCalculatorTable(relevantData);
+                renderCalculatorChart(relevantData);
+            } else {
+                alert('לא נמצאו נתונים עבור הבחירה שלך.');
+            }
+        }
+
+        // --- General View Functions ---
+        function getAveragePrice(data, year, type) {
+            if (!data || data.length === 0) return 0;
+            const total = data.reduce((sum, item) => {
+                let price = 0;
+                if (type === 'original') price = item.original[year];
+                else if (type === 'new') price = item.new[year] || item.original[year];
+                else if (type === 'cpi') price = item.cpi[year];
+                return sum + (price || 0);
+            }, 0);
+            return Math.round(total / data.length);
+        }
+
+        function renderGeneralTable(data) {
+            generalTableBody.innerHTML = '';
+            if (!data || data.length === 0) return;
+            data.forEach(item => {
+                generalTableBody.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-4 text-sm font-medium text-gray-900">${item.type}</td>
+                        <td class="px-4 py-4 text-sm text-center">
+                            <span class="price-original">${item.original['24'].toLocaleString()} ₪</span> / 
+                            <span class="price-cpi">${item.cpi['24'].toLocaleString()} ₪</span>
+                        </td>
+                        <td class="px-4 py-4 text-sm text-center">
+                             <span class="price-original">${item.original['25'].toLocaleString()} ₪</span> / 
+                             <span class="price-new">${item.new['25'].toLocaleString()} ₪</span>
+                        </td>
+                        <td class="px-4 py-4 text-sm text-center">
+                            <span class="price-new">${item.new['26'].toLocaleString()} ₪</span> /
+                            <span class="price-cpi">${item.cpi['26'].toLocaleString()} ₪</span>
+                        </td>
+                        <td class="px-4 py-4 text-sm text-center text-gray-500">${item.arnona.toLocaleString()} ₪</td>
+                    </tr>`;
+            });
+        }
+
+        function renderGeneralChart(data) {
+            if (generalChart) generalChart.destroy();
+            if (!data) return;
             
-            const originalData = [
-                getAveragePrice(data, '24', 'original'),
-                getAveragePrice(data, '25', 'original'),
-                getAveragePrice(data, '26', 'original')
-            ];
+            const labels = ['ספט\' 22', 'ספט\' 23', 'ספט\' 24', 'ספט\' 25', 'ספט\' 26'];
+            const chartData = {
+                labels,
+                datasets: [
+                    { label: 'הסכם מקורי (ממוצע)', data: labels.map((l, i) => i === 4 ? null : getAveragePrice(data, l.slice(-2), 'original')), borderColor: '#16A34A', fill: false, tension: 0.1, spanGaps: true },
+                    { label: 'הצעה חדשה (ממוצע)', data: [null, null, null, getAveragePrice(data, '25', 'new'), getAveragePrice(data, '26', 'new')], borderColor: '#DC2626', fill: false, tension: 0.1 },
+                    { label: 'הצמדה למדד (ממוצע)', data: [getAveragePrice(data, '22', 'original'), null, getAveragePrice(data, '24', 'cpi'), null, getAveragePrice(data, '26', 'cpi')], borderColor: '#2563EB', fill: false, tension: 0.1, spanGaps: true, borderDash: [5, 5] }
+                ]
+            };
+            generalChart = new Chart(generalCtx, { type: 'line', data: chartData, options: getChartOptions() });
+        }
 
-            const newData = [
-                getAveragePrice(data, '24', 'original'), // Starts same as original
-                getAveragePrice(data, '25', 'new'),
-                getAveragePrice(data, '26', 'new')
-            ];
-
-            currentChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'הסכם מקורי',
-                            data: originalData,
-                            borderColor: '#16A34A', // green-600
-                            backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                            fill: true,
-                            tension: 0.1
-                        },
-                        {
-                            label: 'הצעה חדשה',
-                            data: newData,
-                            borderColor: '#DC2626', // red-600
-                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                            fill: true,
-                            tension: 0.1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14,
-                                    family: 'Assistant, sans-serif'
+        function updateGeneralUI() {
+            const data = allPriceData[generalState.location]?.[generalState.age];
+            generalChartTitle.textContent = `ניתוח מחירים: ${generalState.location} - ${generalState.age}`;
+            renderGeneralTable(data);
+            renderGeneralChart(data);
+            document.querySelectorAll('.location-btn-general').forEach(btn => btn.classList.toggle('active', btn.dataset.location === generalState.location));
+            document.querySelectorAll('.age-btn-general').forEach(btn => btn.classList.toggle('active', btn.dataset.age === generalState.age));
+        }
+        
+        function getChartOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { font: { size: 14, family: 'Assistant, sans-serif' } } },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', minimumFractionDigits: 0 }).format(context.parsed.y);
+                                } else {
+                                    return null;
                                 }
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', minimumFractionDigits: 0 }).format(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    return value.toLocaleString() + ' ₪';
-                                }
+                                return label;
                             }
                         }
                     }
-                }
-            });
-        }
-
-        /**
-         * Main update function to refresh the UI based on the current state.
-         */
-        function updateUI() {
-            const data = priceData[currentState.location]?.[currentState.age];
-            
-            // Update title
-            chartTitle.textContent = `ניתוח מחירים: ${currentState.location} - ${currentState.age}`;
-            
-            // Render components
-            renderTable(data);
-            renderChart(data);
-
-            // Update active button styles
-            document.querySelectorAll('.location-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.location === currentState.location);
-            });
-            document.querySelectorAll('.age-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.age === currentState.age);
-            });
+                },
+                scales: { y: { beginAtZero: false, ticks: { callback: (value) => value.toLocaleString() + ' ₪' } } }
+            };
         }
 
         // --- Event Listeners ---
-        document.querySelector('.flex').addEventListener('click', (e) => {
-            if (e.target.matches('.location-btn')) {
-                currentState.location = e.target.dataset.location;
-                updateUI();
-            }
-            if (e.target.matches('.age-btn')) {
-                currentState.age = e.target.dataset.age;
-                updateUI();
-            }
+        mainTabs.forEach(tab => tab.addEventListener('click', () => switchMainTab(tab.dataset.tab)));
+        
+        categorySelect.addEventListener('change', populateApartmentSelect);
+        calculateBtn.addEventListener('click', handleCalculation);
+
+        document.querySelectorAll('.location-btn-general, .age-btn-general').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (e.target.dataset.location) generalState.location = e.target.dataset.location;
+                if (e.target.dataset.age) generalState.age = e.target.dataset.age;
+                updateGeneralUI();
+            });
         });
 
         // --- Initial Load ---
         window.addEventListener('DOMContentLoaded', () => {
-             // Set default active buttons on load
-            document.querySelector(`[data-location="${currentState.location}"]`).classList.add('active');
-            document.querySelector(`[data-age="${currentState.age}"]`).classList.add('active');
-            updateUI();
+             switchMainTab('calculator');
+             document.querySelector('.location-btn-general[data-location="בקעה"]').classList.add('active');
+             document.querySelector('.age-btn-general[data-age="עד גיל 30"]').classList.add('active');
+             populateApartmentSelect();
+             updateGeneralUI();
         });
-
     </script>
 </body>
 </html>
