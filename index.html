@@ -390,8 +390,14 @@
             // Prepare data for connected lines
             const originalData = [item.original2022, null, item.original2024, item.original2024, null];
             const newProposalData = [null, null, item.original2024, item.new2025, item.new2025];
-            // Blue line shows the base price without CPI adjustment (stays at 2022 level)
-            const withoutCpiData = [item.original2022, item.original2022, item.original2022, item.original2022, item.original2022];
+            // Blue line shows the base price without CPI adjustment (original price / 1.0483)
+            const withoutCpiData = [
+                item.original2022, 
+                item.original2022, 
+                Math.round(item.original2024 / cpiIncrease22_24), 
+                Math.round(item.original2024 / cpiIncrease22_24), 
+                Math.round(item.original2024 / cpiIncrease22_24)
+            ];
             
             const chartData = {
                 labels,
@@ -600,8 +606,14 @@
             // Prepare connected data
             const originalData = [avgOriginal2022, null, avgOriginal2024, avgOriginal2024, null];
             const newProposalData = [null, null, avgOriginal2024, avgNew2025, avgNew2025];
-            // Blue line shows the base price without CPI adjustment (stays at 2022 level)
-            const withoutCpiData = [avgOriginal2022, avgOriginal2022, avgOriginal2022, avgOriginal2022, avgOriginal2022];
+            // Blue line shows the base price without CPI adjustment (original price / 1.0483)
+            const withoutCpiData = [
+                avgOriginal2022, 
+                avgOriginal2022, 
+                Math.round(avgOriginal2024 / cpiIncrease22_24), 
+                Math.round(avgOriginal2024 / cpiIncrease22_24), 
+                Math.round(avgOriginal2024 / cpiIncrease22_24)
+            ];
             
             const labels = ['2022', '2023', '2024', '2025', '2026'];
             const chartData = {
