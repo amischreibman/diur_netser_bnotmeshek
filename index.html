@@ -62,7 +62,7 @@
                 <li>• מדד המחירים לצרכן עלה ב-4.83% בין 2022 ל-2024 (מ-97.4 ל-102.1)</li>
                 <li>• צפי עלייה נוספת של 4.83% עד 2026 (סה"כ 9.89% מ-2022)</li>
                 <li>• הקו הכחול המקווקו מציג את מחיר הבסיס משנת 2022 ללא כל הצמדה למדד</li>
-                <li>• ההצעה החדשה כוללת מחירים מעודכנים לספטמבר 2025</li>
+                <li>• דיירי שיכון בקעה לא שילמו ארנונה בשלוש השנים האחרונות - התשלום יתחיל מספטמבר 2025</li>
             </ul>
         </div>
 
@@ -551,6 +551,9 @@
                 const arnonaRate = generalState.location === 'בקעה' ? ARNONA_RATE_BAKAA : ARNONA_RATE_MACHANE;
                 const defaultArnona = Math.round(item.defaultSize * arnonaRate);
                 
+                // Add note if this is Bakaa housing
+                const arnonaNote = item.category === 'שיכון בקעה' ? ' *' : '';
+                
                 generalTableBody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-4 text-sm font-medium text-gray-900">${item.type}</td>
@@ -570,9 +573,19 @@
                             <span class="price-cpi">${item.cpi2026.toLocaleString()} ₪</span>
                         </td>
                         <td class="px-4 py-4 text-sm text-center font-bold text-gray-800">${discountText}</td>
-                        <td class="px-4 py-4 text-sm text-center text-gray-500">${defaultArnona.toLocaleString()} ₪</td>
+                        <td class="px-4 py-4 text-sm text-center text-gray-500">${defaultArnona.toLocaleString()} ₪${arnonaNote}</td>
                     </tr>`;
             });
+            
+            // Add note at the bottom if showing Bakaa data
+            if (data.some(item => item.category === 'שיכון בקעה')) {
+                generalTableBody.innerHTML += `
+                    <tr>
+                        <td colspan="8" class="px-4 py-2 text-xs text-gray-600">
+                            * דיירי שיכון בקעה לא שילמו ארנונה עד כה. הארנונה תתחיל מספטמבר 2025.
+                        </td>
+                    </tr>`;
+            }
         }
 
         function renderGeneralChart(data) {
