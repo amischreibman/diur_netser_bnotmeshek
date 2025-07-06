@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון מחירי דיור אינטראקטיבי</title>
+    <title>מחשבון מחירי דיור - השוואת הסכם מול הצעה חדשה</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,12 +22,12 @@
             transition: all 0.3s ease;
         }
         .main-tab-btn.active {
-            background-color: #1D4ED8; /* blue-700 */
+            background-color: #1D4ED8;
             color: white;
             border-color: #1D4ED8;
         }
         .tab-btn.active {
-            background-color: #1E40AF; /* bg-blue-800 */
+            background-color: #1E40AF;
             color: white;
             font-weight: 700;
         }
@@ -38,14 +38,33 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
+        .info-box {
+            background-color: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-blue-900">ניתוח והשוואת מחירי דיור</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-900">מחשבון מחירי דיור - השוואת הסכם מול הצעה חדשה</h1>
+            <p class="text-lg text-gray-600 mt-2">השוואה בין ההסכם המקורי (2022) להצעה החדשה (2025)</p>
         </header>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3 class="font-bold text-blue-800 mb-2">מידע חשוב:</h3>
+            <ul class="text-sm space-y-1">
+                <li>• מדד המחירים לצרכן עלה ב-4.83% בין 2022 ל-2024 (מ-97.4 ל-102.1)</li>
+                <li>• צפי עלייה נוספת של 4.83% עד 2026 (סה"כ 9.89% מ-2022)</li>
+                <li>• ההסכם המקורי קבע עדכון מחירים כל שנתיים בהתאם למדד</li>
+                <li>• ההצעה החדשה כוללת מחירים מעודכנים לספטמבר 2025</li>
+            </ul>
+        </div>
 
         <!-- Main Tabs -->
         <div class="mb-8 border-b border-gray-300">
@@ -58,27 +77,33 @@
         <!-- Calculator View -->
         <div id="calculator-view" class="tab-content">
             <p class="text-lg text-gray-600 text-center mb-6">הזן את פרטיך וקבל תחזית מחירים מותאמת אישית</p>
-             <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                    <div class="md:col-span-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">1. בחר קטגוריה:</label>
-                        <select id="category-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                            <option value="בקעה">בקעה</option>
-                            <option value="קרווילות">קרווילות</option>
-                            <option value="סדנא/נוער">סדנא/נוער</option>
-                            <option value="מחנה">דירות במחנה</option>
-                        </select>
+            <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">1. בחר אזור:</label>
+                            <select id="location-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option value="בקעה">בקעה</option>
+                                <option value="שטח המחנה">שטח המחנה</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="apartment-select" class="block text-sm font-medium text-gray-700 mb-1">2. בחר סוג דירה:</label>
+                            <select id="apartment-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"></select>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="age-input" class="block text-sm font-medium text-gray-700 mb-1">3. הזן גיל:</label>
+                            <input type="number" id="age-input" placeholder="לדוגמה: 32" class="mt-1 block w-full pl-3 pr-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        </div>
+                        <div>
+                            <label for="sqm-input" class="block text-sm font-medium text-gray-700 mb-1">4. הזן גודל דירה (מ"ר):</label>
+                            <input type="number" id="sqm-input" placeholder="גודל במטר רבוע" class="mt-1 block w-full pl-3 pr-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        </div>
                     </div>
                     <div class="md:col-span-1">
-                        <label for="apartment-select" class="block text-sm font-medium text-gray-700 mb-1">2. בחר סוג דירה:</label>
-                        <select id="apartment-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"></select>
-                    </div>
-                    <div class="md:col-span-1">
-                         <label for="age-input" class="block text-sm font-medium text-gray-700 mb-1">3. הזן גיל:</label>
-                        <input type="number" id="age-input" placeholder="לדוגמה: 32" class="mt-1 block w-full pl-3 pr-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                    </div>
-                    <div class="md:col-span-1">
-                        <button id="calculate-btn" class="w-full bg-blue-700 text-white font-bold py-2.5 px-4 rounded-md hover:bg-blue-800 transition">חשב</button>
+                        <button id="calculate-btn" class="w-full h-full bg-blue-700 text-white font-bold py-2.5 px-4 rounded-md hover:bg-blue-800 transition text-lg">חשב</button>
                     </div>
                 </div>
             </div>
@@ -90,10 +115,13 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">סוג דירה</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 24</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 25</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 26</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ארנונה</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2022 (הסכם)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2024 (הסכם)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2024 (צמוד מדד)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2025 (הצעה)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2026 (צמוד מדד)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">אחוז הנחה</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ארנונה חודשית</th>
                             </tr>
                         </thead>
                         <tbody id="calculator-price-table-body" class="bg-white divide-y divide-gray-200"></tbody>
@@ -107,16 +135,16 @@
 
         <!-- General View -->
         <div id="general-view" class="tab-content hidden">
-             <p class="text-lg text-gray-600 text-center mb-6">הצגת נתונים כללית לפי קבוצות גיל ואזורים</p>
-             <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-8">
+            <p class="text-lg text-gray-600 text-center mb-6">הצגת נתונים כללית לפי קבוצות גיל ואזורים</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-8">
                 <div class="flex justify-center bg-gray-200 rounded-full p-1 shadow-inner">
                     <button class="tab-btn location-btn-general w-full md:w-auto px-6 py-2 rounded-full text-lg" data-location="בקעה">בקעה</button>
                     <button class="tab-btn location-btn-general w-full md:w-auto px-6 py-2 rounded-full text-lg" data-location="שטח המחנה">שטח המחנה</button>
                 </div>
                 <div class="flex justify-center bg-gray-200 rounded-full p-1 shadow-inner">
-                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="עד גיל 30">עד גיל 30</button>
-                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="30-37">גילאי 30-37</button>
-                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="תושבים וגילאי 38 ומעלה">38+ ותושבים</button>
+                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="20-30">20-30</button>
+                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="30-37">30-37</button>
+                    <button class="tab-btn age-btn-general px-4 py-2 rounded-full" data-age="38+">38+</button>
                 </div>
             </div>
             <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
@@ -125,11 +153,14 @@
                 <div class="table-responsive">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                             <tr>
+                            <tr>
                                 <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">סוג דירה</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 24</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 25</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ספט' 26</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2022 (הסכם)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2024 (הסכם)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2024 (צמוד מדד)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2025 (הצעה)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">2026 (צמוד מדד)</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">אחוז הנחה</th>
                                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">ארנונה</th>
                             </tr>
                         </thead>
@@ -138,145 +169,146 @@
                 </div>
             </div>
         </div>
-        <p class="text-xs text-center text-gray-500 mt-6">
-            <strong>מקרא:</strong>
-            <span class="price-original">הסכם מקורי</span> |
-            <span class="price-new">הצעה חדשה</span> |
-            <span class="price-cpi">הצמדה למדד</span>
-        </p>
+        <div class="mt-6 bg-white p-4 rounded-lg shadow">
+            <p class="text-sm text-center text-gray-600">
+                <strong>מקרא:</strong>
+                <span class="price-original">מחיר הסכם מקורי</span> |
+                <span class="price-new">הצעה חדשה</span> |
+                <span class="price-cpi">הצמדה למדד</span>
+            </p>
+        </div>
     </div>
 
     <script>
         // --- Data & CPI Calculation ---
         const cpiIncrease22_24 = 1.0483; // (102.1 / 97.4)
-        const cpiIncrease22_26 = 1.0989; // (102.1 / 97.4) * (102.1 / 97.4) - Projected
+        const cpiIncrease22_26 = 1.0989; // Projected: 4.83% additional increase
+        const ARNONA_RATE_BAKAA = 12.6;
+        const ARNONA_RATE_MACHANE = 11.7;
 
+        // Price data based on the Excel screenshots and PDF
         const allPriceData = {
             'בקעה': {
-                'עד גיל 30': [
-                    { type: 'רכבות אמצע/פינה, בית חיילים', original: { '22': 850, '23': 900, '24': 1000, '25': 1000 }, new: { '25': 1126, '26': 1252 }, arnona: 76 },
-                    { type: 'רכבות חדר כפול', original: { '22': 1500, '23': 1700, '24': 2000, '25': 2000 }, new: { '25': 2135, '26': 2270 }, arnona: 135 },
-                    { type: 'דירת צד', original: { '22': 1600, '23': 1900, '24': 2200, '25': 2200 }, new: { '25': 2354, '26': 2508 }, arnona: 154 },
-                    { type: 'דירת צד מורחבת', original: { '22': 1800, '23': 2200, '24': 2600, '25': 2600 }, new: { '25': 2805, '26': 3010 }, arnona: 205 },
+                '20-30': [
+                    { type: 'רכבות/אמצע', original2022: 850, original2024: 1000, new2025: 1126, discount: 52.27, defaultSize: 12.6 },
+                    { type: 'רכבות/פינה', original2022: 850, original2024: 1000, new2025: 1110, discount: 52.27, defaultSize: 11.0 },
+                    { type: 'בית חיילים', original2022: 1350, original2024: 1600, new2025: 1148, discount: 52.27, defaultSize: 14.8 },
+                    { type: 'רכבות חדר כפול', original2022: 1500, original2024: 2000, new2025: 2335, discount: 42.11, defaultSize: 16.8 },
+                    { type: 'דירת צד', original2022: 1600, original2024: 2200, new2025: 2554, discount: 41.46, defaultSize: 16.1 },
+                    { type: 'דירת צד מורחבת', original2022: 1800, original2024: 2600, new2025: 2905, discount: 41.30, defaultSize: 13.7 }
                 ],
                 '30-37': [
-                    { type: 'רכבות אמצע/פינה, בית חיילים', original: { '22': 1350, '23': 1400, '24': 1600, '25': 1600 }, new: { '25': 1700, '26': 1800 }, arnona: 76 },
-                    { type: 'רכבות חדר כפול', original: { '22': 2050, '23': 2200, '24': 2400, '25': 2400 }, new: { '25': 2600, '26': 2800 }, arnona: 135 },
-                    { type: 'דירת צד', original: { '22': 2200, '23': 2400, '24': 2600, '25': 2600 }, new: { '25': 2800, '26': 3000 }, arnona: 154 },
-                    { type: 'דירת צד מורחבת', original: { '22': 2400, '23': 2800, '24': 3300, '25': 3300 }, new: { '25': 3600, '26': 3900 }, arnona: 205 },
+                    { type: 'רכבות/אמצע', original2022: 1350, original2024: 1600, new2025: 1700, discount: 22.73, defaultSize: 12.6 },
+                    { type: 'רכבות/פינה', original2022: 1350, original2024: 1600, new2025: 1700, discount: 22.73, defaultSize: 11.0 },
+                    { type: 'בית חיילים', original2022: 1350, original2024: 1600, new2025: 1700, discount: 22.73, defaultSize: 14.8 },
+                    { type: 'רכבות חדר כפול', original2022: 2050, original2024: 2400, new2025: 2600, discount: 31.58, defaultSize: 16.8 },
+                    { type: 'דירת צד', original2022: 2200, original2024: 2600, new2025: 2800, discount: 31.71, defaultSize: 16.1 },
+                    { type: 'דירת צד מורחבת', original2022: 2400, original2024: 3300, new2025: 3400, discount: 26.09, defaultSize: 13.7 }
                 ],
-                'תושבים וגילאי 38 ומעלה': [
-                    { type: 'רכבות אמצע/פינה', original: { '22': 1700, '23': 1800, '24': 2100, '25': 2100 }, new: { '25': 2200, '26': 2300 }, arnona: 76 },
-                    { type: 'בית חיילים', original: { '22': 2000, '23': 2000, '24': 2100, '25': 2100 }, new: { '25': 2200, '26': 2300 }, arnona: 80 },
-                    { type: 'רכבות חדר כפול', original: { '22': 3300, '23': 3300, '24': 3500, '25': 3500 }, new: { '25': 3700, '26': 3900 }, arnona: 135 },
-                    { type: 'דירת צד', original: { '22': 3600, '23': 3600, '24': 3800, '25': 3800 }, new: { '25': 4100, '26': 4400 }, arnona: 154 },
-                    { type: 'דירת צד מורחבת', original: { '22': 4300, '23': 4300, '24': 4500, '25': 4500 }, new: { '25': 4900, '26': 5300 }, arnona: 205 },
+                '38+': [
+                    { type: 'רכבות/אמצע', original2022: 1700, original2024: 2100, new2025: 2200, discount: 0, defaultSize: 12.6 },
+                    { type: 'רכבות/פינה', original2022: 1700, original2024: 2100, new2025: 2200, discount: 0, defaultSize: 11.0 },
+                    { type: 'בית חיילים', original2022: 2000, original2024: 2100, new2025: 2100, discount: 0, defaultSize: 14.8 },
+                    { type: 'רכבות חדר כפול', original2022: 3300, original2024: 3500, new2025: 3800, discount: 0, defaultSize: 16.8 },
+                    { type: 'דירת צד', original2022: 3600, original2024: 3800, new2025: 4100, discount: 0, defaultSize: 16.1 },
+                    { type: 'דירת צד מורחבת', original2022: 4300, original2024: 4500, new2025: 4600, discount: 0, defaultSize: 13.7 }
                 ]
             },
             'שטח המחנה': {
-                 'עד גיל 30': [
-                    { type: 'דירת נוער/סדנה', category: 'סדנא/נוער', original: { '22': 1750, '23': 2400, '24': 3100, '25': 3100 }, new: { '25': 3317, '26': 3534 }, arnona: 217 },
-                    { type: 'דירה מורחבת/קטנה', category: 'מחנה', original: { '22': 1850, '23': 2400, '24': 3000, '25': 3000 }, new: { '25': 3186, '26': 3372 }, arnona: 286 },
-                    { type: 'דירה גדולה קרווילות', category: 'קרווילות', original: { '22': 1400, '23': 2300, '24': 3300, '25': 3300 }, new: { '25': 3515, '26': 3726 }, arnona: 236 },
-                    { type: 'קרווילה מורחבת', category: 'קרווילות', original: { '22': 2400, '23': 3100, '24': 3800, '25': 3800 }, new: { '25': 4085, '26': 4370 }, arnona: 285 },
-                    { type: 'קרווילה מורחבת פלוס', category: 'קרווילות', original: { '22': 2750, '23': 3400, '24': 4200, '25': 4200 }, new: { '25': 4515, '26': 4830 }, arnona: 315 },
-                    { type: 'דירת 2 חדרים', category: 'מחנה', original: { '22': 1450, '23': 1800, '24': 2200, '25': 2200 }, new: { '25': 2354, '26': 2508 }, arnona: 154 },
-                    { type: 'דירת 3 חדרים', category: 'מחנה', original: { '22': 1850, '23': 2600, '24': 3400, '25': 3400 }, new: { '25': 3656, '26': 3912 }, arnona: 236 },
-                    { type: 'דירת 4 חדרים', category: 'מחנה', original: { '22': 2100, '23': 2800, '24': 3600, '25': 3600 }, new: { '25': 3875, '26': 4150 }, arnona: 252 },
-                    { type: 'דירת 5 חדרים', category: 'מחנה', original: { '22': 2450, '23': 3200, '24': 4000, '25': 4000 }, new: { '25': 4306, '26': 4612 }, arnona: 280 },
-                    { type: 'דירת 6 חדרים', category: 'מחנה', original: { '22': 2550, '23': 3500, '24': 4500, '25': 4500 }, new: { '25': 4844, '26': 5188 }, arnona: 320 },
+                '20-30': [
+                    { type: 'דירת נוער/סדנה', original2022: 1750, original2024: 3100, new2025: 3260, discount: 7.27, defaultSize: 57.5 },
+                    { type: 'דירה קטנה', original2022: 1850, original2024: 3000, new2025: 3100, discount: 7.04, defaultSize: 89.3 },
+                    { type: 'דירה מורחבת', original2022: 1850, original2024: 3000, new2025: 3100, discount: 7.04, defaultSize: 91.1 },
+                    { type: 'דירה גדולה קרווילות', original2022: 1400, original2024: 3300, new2025: 3800, discount: 6.49, defaultSize: 94.6 },
+                    { type: 'קרווילה מורחבת', original2022: 2400, original2024: 3800, new2025: 3850, discount: 6.31, defaultSize: 100.0 },
+                    { type: 'קרווילה מורחבת פלוס', original2022: 2750, original2024: 4200, new2025: 4100, discount: 6.67, defaultSize: 105.8 },
+                    { type: 'דירת 2 חדרים', original2022: 1450, original2024: 2200, new2025: 2850, discount: 6.35, defaultSize: 101.0 },
+                    { type: 'דירת 3 חדרים', original2022: 1850, original2024: 3400, new2025: 3550, discount: 7.46, defaultSize: 101.2 },
+                    { type: 'דירת 4 חדרים', original2022: 2100, original2024: 3600, new2025: 5550, discount: 6.85, defaultSize: 101.3 },
+                    { type: 'דירת 5 חדרים', original2022: 2450, original2024: 4000, new2025: 6000, discount: 7.27, defaultSize: 101.3 },
+                    { type: 'דירת 6 חדרים', original2022: 2550, original2024: 4500, new2025: 6300, discount: 0, defaultSize: 104.9 }
                 ],
                 '30-37': [
-                    { type: 'דירת נוער/סדנה', category: 'סדנא/נוער', original: { '22': 2600, '23': 2900, '24': 3400, '25': 3400 }, new: { '25': 3700, '26': 4000 }, arnona: 217 },
-                    { type: 'דירה מורחבת/קטנה', category: 'מחנה', original: { '22': 2800, '23': 3000, '24': 3400, '25': 3400 }, new: { '25': 3600, '26': 3800 }, arnona: 286 },
-                    { type: 'דירה גדולה קרווילות', category: 'קרווילות', original: { '22': 2950, '23': 3300, '24': 3800, '25': 3800 }, new: { '25': 4100, '26': 4400 }, arnona: 236 },
-                    { type: 'קרווילה מורחבת', category: 'קרווילות', original: { '22': 3300, '23': 3700, '24': 4100, '25': 4100 }, new: { '25': 4500, '26': 4900 }, arnona: 285 },
-                    { type: 'קרווילה מורחבת פלוס', category: 'קרווילות', original: { '22': 3700, '23': 4100, '24': 4500, '25': 4500 }, new: { '25': 4900, '26': 5300 }, arnona: 315 },
-                    { type: 'דירת 2 חדרים', category: 'מחנה', original: { '22': 2200, '23': 2300, '24': 2500, '25': 2500 }, new: { '25': 2700, '26': 2900 }, arnona: 154 },
-                    { type: 'דירת 3 חדרים', category: 'מחנה', original: { '22': 2800, '23': 3200, '24': 3700, '25': 3700 }, new: { '25': 4000, '26': 4300 }, arnona: 236 },
-                    { type: 'דירת 4 חדרים', category: 'מחנה', original: { '22': 2950, '23': 3400, '24': 3900, '25': 3900 }, new: { '25': 4200, '26': 4500 }, arnona: 252 },
-                    { type: 'דירת 5 חדרים', category: 'מחנה', original: { '22': 3700, '23': 4000, '24': 4400, '25': 4400 }, new: { '25': 4800, '26': 5200 }, arnona: 280 },
-                    { type: 'דירת 6 חדרים', category: 'מחנה', original: { '22': 3600, '23': 4200, '24': 4800, '25': 4800 }, new: { '25': 5200, '26': 5600 }, arnona: 320 },
+                    { type: 'דירת נוער/סדנה', original2022: 2600, original2024: 3400, new2025: 3700, discount: 0, defaultSize: 57.5 },
+                    { type: 'דירה קטנה', original2022: 2800, original2024: 3400, new2025: 3600, discount: 0, defaultSize: 89.3 },
+                    { type: 'דירה מורחבת', original2022: 2800, original2024: 3400, new2025: 3600, discount: 0, defaultSize: 91.1 },
+                    { type: 'דירה גדולה קרווילות', original2022: 2950, original2024: 3800, new2025: 4100, discount: 0, defaultSize: 94.6 },
+                    { type: 'קרווילה מורחבת', original2022: 3300, original2024: 4100, new2025: 4500, discount: 0, defaultSize: 100.0 },
+                    { type: 'קרווילה מורחבת פלוס', original2022: 3700, original2024: 4500, new2025: 4900, discount: 0, defaultSize: 105.8 },
+                    { type: 'דירת 2 חדרים', original2022: 2200, original2024: 2500, new2025: 2700, discount: 0, defaultSize: 101.0 },
+                    { type: 'דירת 3 חדרים', original2022: 2800, original2024: 3700, new2025: 4000, discount: 0, defaultSize: 101.2 },
+                    { type: 'דירת 4 חדרים', original2022: 2950, original2024: 3900, new2025: 4200, discount: 0, defaultSize: 101.3 },
+                    { type: 'דירת 5 חדרים', original2022: 3700, original2024: 4400, new2025: 4800, discount: 0, defaultSize: 101.3 },
+                    { type: 'דירת 6 חדרים', original2022: 3600, original2024: 4800, new2025: 5200, discount: 0, defaultSize: 104.9 }
                 ],
-                'תושבים וגילאי 38 ומעלה': [
-                    { type: 'דירת נוער/סדנה', category: 'סדנא/נוער', original: { '22': 4800, '23': 4800, '24': 4800, '25': 4800 }, new: { '25': 5200, '26': 5600 }, arnona: 217 },
-                    { type: 'דירה מורחבת/קטנה', category: 'מחנה', original: { '22': 4700, '23': 4700, '24': 4700, '25': 4700 }, new: { '25': 5100, '26': 5500 }, arnona: 286 },
-                    { type: 'דירה גדולה קרווילות', category: 'קרווילות', original: { '22': 5300, '23': 5300, '24': 5300, '25': 5300 }, new: { '25': 5700, '26': 6200 }, arnona: 236 },
-                    { type: 'קרווילה מורחבת', category: 'קרווילות', original: { '22': 5600, '23': 5600, '24': 5600, '25': 5600 }, new: { '25': 6100, '26': 6600 }, arnona: 285 },
-                    { type: 'קרווילה מורחבת פלוס', category: 'קרווילות', original: { '22': 6000, '23': 6000, '24': 6000, '25': 6000 }, new: { '25': 6500, '26': 7000 }, arnona: 315 },
-                    { type: 'דירת 2 חדרים', category: 'מחנה', original: { '22': 3500, '23': 3500, '24': 3500, '25': 3500 }, new: { '25': 3800, '26': 4100 }, arnona: 154 },
-                    { type: 'דירת 3 חדרים', category: 'מחנה', original: { '22': 5200, '23': 5200, '24': 5200, '25': 5200 }, new: { '25': 5600, '26': 6000 }, arnona: 236 },
-                    { type: 'דירת 4 חדרים', category: 'מחנה', original: { '22': 5400, '23': 5400, '24': 5400, '25': 5400 }, new: { '25': 5800, '26': 6200 }, arnona: 252 },
-                    { type: 'דירת 5 חדרים', category: 'מחנה', original: { '22': 5800, '23': 5800, '24': 5800, '25': 5800 }, new: { '25': 6300, '26': 6800 }, arnona: 280 },
-                    { type: 'דירת 6 חדרים', category: 'מחנה', original: { '22': 6500, '23': 6500, '24': 6500, '25': 6500 }, new: { '25': 7000, '26': 7500 }, arnona: 320 },
+                '38+': [
+                    { type: 'דירת נוער/סדנה', original2022: 4800, original2024: 4800, new2025: 5117, discount: 0, defaultSize: 57.5 },
+                    { type: 'דירה קטנה', original2022: 4700, original2024: 4700, new2025: 6185, discount: 0, defaultSize: 89.3 },
+                    { type: 'דירה מורחבת', original2022: 4700, original2024: 4700, new2025: 6154, discount: 0, defaultSize: 91.1 },
+                    { type: 'דירה גדולה קרווילות', original2022: 5300, original2024: 5300, new2025: 7115, discount: 0, defaultSize: 94.6 },
+                    { type: 'קרווילה מורחבת', original2022: 5600, original2024: 5600, new2025: 4835, discount: 0, defaultSize: 100.0 },
+                    { type: 'קרווילה מורחבת פלוס', original2022: 6000, original2024: 6000, new2025: 5186, discount: 0, defaultSize: 105.8 },
+                    { type: 'דירת 2 חדרים', original2022: 3500, original2024: 3500, new2025: 5982, discount: 0, defaultSize: 101.0 },
+                    { type: 'דירת 3 חדרים', original2022: 5200, original2024: 5200, new2025: 3260, discount: 0, defaultSize: 101.2 },
+                    { type: 'דירת 4 חדרים', original2022: 5400, original2024: 5400, new2025: 2952, discount: 0, defaultSize: 101.3 },
+                    { type: 'דירת 5 חדרים', original2022: 5800, original2024: 5800, new2025: 5129, discount: 0, defaultSize: 101.3 },
+                    { type: 'דירת 6 חדרים', original2022: 6500, original2024: 6500, new2025: 5697, discount: 0, defaultSize: 104.9 }
                 ]
             }
         };
 
-        // --- Setup & State ---
-        Object.values(allPriceData).forEach(loc => Object.values(loc).forEach(ageG => ageG.forEach(item => {
-            if (!item.category) item.category = 'בקעה'; // Assign default category for 'בקעה'
-            item.cpi = {
-                '24': Math.round(item.original['22'] * cpiIncrease22_24),
-                '26': Math.round(item.original['22'] * cpiIncrease22_26)
-            };
-        })));
+        // Calculate CPI adjusted prices
+        Object.values(allPriceData).forEach(location => {
+            Object.values(location).forEach(ageGroup => {
+                ageGroup.forEach(item => {
+                    item.cpi2024 = Math.round(item.original2022 * cpiIncrease22_24);
+                    item.cpi2026 = Math.round(item.original2022 * cpiIncrease22_26);
+                });
+            });
+        });
 
-        let calculatorChart = null;
-        let generalChart = null;
-        let calculatorState = { category: 'בקעה' };
-        let generalState = { location: 'בקעה', age: 'עד גיל 30' };
+        // --- State & DOM Elements ---
+        let calculatorChart = null, generalChart = null;
+        let generalState = { location: 'בקעה', age: '20-30' };
 
-        // --- DOM Elements ---
         const mainTabs = document.querySelectorAll('.main-tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-        
-        // Calculator elements
-        const categorySelect = document.getElementById('category-select');
+        const locationSelect = document.getElementById('location-select');
         const apartmentSelect = document.getElementById('apartment-select');
         const ageInput = document.getElementById('age-input');
+        const sqmInput = document.getElementById('sqm-input');
         const calculateBtn = document.getElementById('calculate-btn');
         const calculatorResultsArea = document.getElementById('calculator-results-area');
         const calculatorInitialMessage = document.getElementById('calculator-initial-message');
         const calculatorTableBody = document.getElementById('calculator-price-table-body');
         const calculatorChartTitle = document.getElementById('calculator-chart-title');
         const calculatorCtx = document.getElementById('calculatorPriceChart').getContext('2d');
-
-        // General view elements
         const generalTableBody = document.getElementById('general-price-table-body');
         const generalChartTitle = document.getElementById('general-chart-title');
         const generalCtx = document.getElementById('generalPriceChart').getContext('2d');
 
         // --- Functions ---
         function switchMainTab(tabName) {
-            tabContents.forEach(content => content.classList.add('hidden'));
+            tabContents.forEach(c => c.classList.add('hidden'));
             document.getElementById(`${tabName}-view`).classList.remove('hidden');
-            mainTabs.forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tab === tabName);
-                tab.classList.toggle('border-blue-700', tab.dataset.tab === tabName);
-            });
+            mainTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
         }
 
         function getAgeGroup(age) {
             if (!age || age <= 0) return null;
-            if (age <= 30) return 'עד גיל 30';
+            if (age >= 20 && age <= 30) return '20-30';
             if (age >= 31 && age <= 37) return '30-37';
-            return 'תושבים וגילאי 38 ומעלה';
+            return '38+';
         }
 
-        // --- Calculator Functions ---
         function populateApartmentSelect() {
-            const category = categorySelect.value;
+            const location = locationSelect.value;
             const apartmentTypes = new Set();
-            Object.values(allPriceData).forEach(location => {
-                Object.values(location).forEach(ageGroup => {
-                    ageGroup.forEach(item => {
-                        if (item.category === category) {
-                            apartmentTypes.add(item.type);
-                        }
-                    });
-                });
+            
+            Object.values(allPriceData[location]).forEach(ageGroup => {
+                ageGroup.forEach(item => apartmentTypes.add(item.type));
             });
+            
             apartmentSelect.innerHTML = '<option value="" disabled selected>בחר סוג דירה</option>';
             [...apartmentTypes].sort().forEach(type => {
                 const option = document.createElement('option');
@@ -284,120 +316,197 @@
                 option.textContent = type;
                 apartmentSelect.appendChild(option);
             });
+            sqmInput.value = '';
+        }
+
+        function updateSqmDefault() {
+            const location = locationSelect.value;
+            const apartmentType = apartmentSelect.value;
+            if (!apartmentType) return;
+
+            const data = Object.values(allPriceData[location]).flat().find(item => item.type === apartmentType);
+            if (data) {
+                sqmInput.value = data.defaultSize;
+            }
         }
         
-        function renderCalculatorTable(item) {
+        function renderCalculatorTable(item, calculatedArnona) {
+            const discountText = item.discount > 0 ? `${item.discount.toFixed(2)}%` : '-';
             calculatorTableBody.innerHTML = !item ? '' : `
                 <tr class="bg-blue-50">
                     <td class="px-4 py-4 text-sm font-medium text-gray-900">${item.type}</td>
                     <td class="px-4 py-4 text-sm text-center">
-                        <span class="price-original">${item.original['24'].toLocaleString()} ₪</span> / 
-                        <span class="price-cpi">${item.cpi['24'].toLocaleString()} ₪</span>
+                        <span class="price-original">${item.original2022.toLocaleString()} ₪</span>
                     </td>
                     <td class="px-4 py-4 text-sm text-center">
-                        <span class="price-original">${item.original['25'].toLocaleString()} ₪</span> / 
-                        <span class="price-new">${item.new['25'].toLocaleString()} ₪</span>
+                        <span class="price-original">${item.original2024.toLocaleString()} ₪</span>
                     </td>
                     <td class="px-4 py-4 text-sm text-center">
-                        <span class="price-new">${item.new['26'].toLocaleString()} ₪</span> /
-                        <span class="price-cpi">${item.cpi['26'].toLocaleString()} ₪</span>
+                        <span class="price-cpi">${item.cpi2024.toLocaleString()} ₪</span>
                     </td>
-                    <td class="px-4 py-4 text-sm text-center text-gray-500">${item.arnona.toLocaleString()} ₪</td>
+                    <td class="px-4 py-4 text-sm text-center">
+                        <span class="price-new">${item.new2025.toLocaleString()} ₪</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-center">
+                        <span class="price-cpi">${item.cpi2026.toLocaleString()} ₪</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-center font-bold text-gray-800">${discountText}</td>
+                    <td class="px-4 py-4 text-sm text-center font-bold text-gray-800">${calculatedArnona.toLocaleString()} ₪</td>
                 </tr>`;
         }
 
-        function renderCalculatorChart(item) {
-            if (calculatorChart) calculatorChart.destroy();
-            if (!item) return;
+        function renderChart(canvasCtx, chartInstance, item) {
+            if (chartInstance) chartInstance.destroy();
+            if (!item) return null;
             
-            const labels = ['ספט\' 22', 'ספט\' 23', 'ספט\' 24', 'ספט\' 25', 'ספט\' 26'];
+            const labels = ['2022', '2023', '2024', '2025', '2026'];
             const chartData = {
                 labels,
                 datasets: [
-                    { label: 'הסכם מקורי', data: [item.original['22'], item.original['23'], item.original['24'], item.original['25'], null], borderColor: '#16A34A', fill: false, tension: 0.1, spanGaps: true },
-                    { label: 'הצעה חדשה', data: [null, null, null, item.new['25'], item.new['26']], borderColor: '#DC2626', fill: false, tension: 0.1 },
-                    { label: 'הצמדה למדד', data: [item.original['22'], null, item.cpi['24'], null, item.cpi['26']], borderColor: '#2563EB', fill: false, tension: 0.1, spanGaps: true, borderDash: [5, 5] }
+                    { 
+                        label: 'הסכם מקורי', 
+                        data: [item.original2022, null, item.original2024, null, null], 
+                        borderColor: '#16A34A', 
+                        backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                        fill: false, 
+                        tension: 0.1,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    { 
+                        label: 'הצעה חדשה', 
+                        data: [null, null, null, item.new2025, null], 
+                        borderColor: '#DC2626', 
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        fill: false, 
+                        tension: 0.1,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    { 
+                        label: 'הצמדה למדד', 
+                        data: [item.original2022, null, item.cpi2024, null, item.cpi2026], 
+                        borderColor: '#2563EB', 
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        fill: false, 
+                        tension: 0.1, 
+                        borderDash: [5, 5],
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }
                 ]
             };
-            calculatorChart = new Chart(calculatorCtx, { type: 'line', data: chartData, options: getChartOptions() });
+            return new Chart(canvasCtx, { type: 'line', data: chartData, options: getChartOptions() });
         }
 
         function handleCalculation() {
             const age = parseInt(ageInput.value, 10);
+            const location = locationSelect.value;
             const apartmentType = apartmentSelect.value;
-            if (!age || !apartmentType) {
-                alert('אנא מלא את כל הפרטים: קטגוריה, סוג דירה וגיל.');
+            const sqm = parseFloat(sqmInput.value);
+
+            if (!age || !apartmentType || !sqm || sqm <= 0) {
+                alert('אנא מלא את כל הפרטים: אזור, סוג דירה, גיל וגודל דירה חיובי.');
                 return;
             }
             const ageGroup = getAgeGroup(age);
             
-            let relevantData = null;
-            Object.values(allPriceData).forEach(location => {
-                if (location[ageGroup]) {
-                    const found = location[ageGroup].find(item => item.type === apartmentType);
-                    if (found) relevantData = found;
-                }
-            });
+            const relevantData = allPriceData[location][ageGroup]?.find(item => item.type === apartmentType);
 
             if (relevantData) {
+                const arnonaRate = location === 'בקעה' ? ARNONA_RATE_BAKAA : ARNONA_RATE_MACHANE;
+                const calculatedArnona = Math.round(sqm * arnonaRate);
+
                 calculatorResultsArea.classList.remove('hidden');
                 calculatorInitialMessage.classList.add('hidden');
-                calculatorChartTitle.textContent = `תחזית אישית: ${apartmentType} (גיל ${age})`;
-                renderCalculatorTable(relevantData);
-                renderCalculatorChart(relevantData);
+                calculatorChartTitle.textContent = `תחזית מחירים: ${apartmentType} ב${location} (גיל ${age})`;
+                renderCalculatorTable(relevantData, calculatedArnona);
+                calculatorChart = renderChart(calculatorCtx, calculatorChart, relevantData);
             } else {
                 alert('לא נמצאו נתונים עבור הבחירה שלך.');
             }
         }
 
         // --- General View Functions ---
-        function getAveragePrice(data, year, type) {
-            if (!data || data.length === 0) return 0;
-            const total = data.reduce((sum, item) => {
-                let price = 0;
-                if (type === 'original') price = item.original[year];
-                else if (type === 'new') price = item.new[year] || item.original[year];
-                else if (type === 'cpi') price = item.cpi[year];
-                return sum + (price || 0);
-            }, 0);
-            return Math.round(total / data.length);
-        }
-
         function renderGeneralTable(data) {
             generalTableBody.innerHTML = '';
             if (!data || data.length === 0) return;
+            
             data.forEach(item => {
+                const discountText = item.discount > 0 ? `${item.discount.toFixed(2)}%` : '-';
+                const arnonaRate = generalState.location === 'בקעה' ? ARNONA_RATE_BAKAA : ARNONA_RATE_MACHANE;
+                const defaultArnona = Math.round(item.defaultSize * arnonaRate);
+                
                 generalTableBody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-4 text-sm font-medium text-gray-900">${item.type}</td>
                         <td class="px-4 py-4 text-sm text-center">
-                            <span class="price-original">${item.original['24'].toLocaleString()} ₪</span> / 
-                            <span class="price-cpi">${item.cpi['24'].toLocaleString()} ₪</span>
+                            <span class="price-original">${item.original2022.toLocaleString()} ₪</span>
                         </td>
                         <td class="px-4 py-4 text-sm text-center">
-                             <span class="price-original">${item.original['25'].toLocaleString()} ₪</span> / 
-                             <span class="price-new">${item.new['25'].toLocaleString()} ₪</span>
+                            <span class="price-original">${item.original2024.toLocaleString()} ₪</span>
                         </td>
                         <td class="px-4 py-4 text-sm text-center">
-                            <span class="price-new">${item.new['26'].toLocaleString()} ₪</span> /
-                            <span class="price-cpi">${item.cpi['26'].toLocaleString()} ₪</span>
+                            <span class="price-cpi">${item.cpi2024.toLocaleString()} ₪</span>
                         </td>
-                        <td class="px-4 py-4 text-sm text-center text-gray-500">${item.arnona.toLocaleString()} ₪</td>
+                        <td class="px-4 py-4 text-sm text-center">
+                            <span class="price-new">${item.new2025.toLocaleString()} ₪</span>
+                        </td>
+                        <td class="px-4 py-4 text-sm text-center">
+                            <span class="price-cpi">${item.cpi2026.toLocaleString()} ₪</span>
+                        </td>
+                        <td class="px-4 py-4 text-sm text-center font-bold text-gray-800">${discountText}</td>
+                        <td class="px-4 py-4 text-sm text-center text-gray-500">${defaultArnona.toLocaleString()} ₪</td>
                     </tr>`;
             });
         }
 
         function renderGeneralChart(data) {
             if (generalChart) generalChart.destroy();
-            if (!data) return;
+            if (!data || data.length === 0) return;
             
-            const labels = ['ספט\' 22', 'ספט\' 23', 'ספט\' 24', 'ספט\' 25', 'ספט\' 26'];
+            // Calculate averages for the chart
+            const avgOriginal2022 = Math.round(data.reduce((sum, item) => sum + item.original2022, 0) / data.length);
+            const avgOriginal2024 = Math.round(data.reduce((sum, item) => sum + item.original2024, 0) / data.length);
+            const avgNew2025 = Math.round(data.reduce((sum, item) => sum + item.new2025, 0) / data.length);
+            const avgCpi2024 = Math.round(data.reduce((sum, item) => sum + item.cpi2024, 0) / data.length);
+            const avgCpi2026 = Math.round(data.reduce((sum, item) => sum + item.cpi2026, 0) / data.length);
+            
+            const labels = ['2022', '2023', '2024', '2025', '2026'];
             const chartData = {
                 labels,
                 datasets: [
-                    { label: 'הסכם מקורי (ממוצע)', data: labels.map((l, i) => i === 4 ? null : getAveragePrice(data, l.slice(-2), 'original')), borderColor: '#16A34A', fill: false, tension: 0.1, spanGaps: true },
-                    { label: 'הצעה חדשה (ממוצע)', data: [null, null, null, getAveragePrice(data, '25', 'new'), getAveragePrice(data, '26', 'new')], borderColor: '#DC2626', fill: false, tension: 0.1 },
-                    { label: 'הצמדה למדד (ממוצע)', data: [getAveragePrice(data, '22', 'original'), null, getAveragePrice(data, '24', 'cpi'), null, getAveragePrice(data, '26', 'cpi')], borderColor: '#2563EB', fill: false, tension: 0.1, spanGaps: true, borderDash: [5, 5] }
+                    { 
+                        label: 'הסכם מקורי (ממוצע)', 
+                        data: [avgOriginal2022, null, avgOriginal2024, null, null], 
+                        borderColor: '#16A34A',
+                        backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                        fill: false, 
+                        tension: 0.1,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    { 
+                        label: 'הצעה חדשה (ממוצע)', 
+                        data: [null, null, null, avgNew2025, null], 
+                        borderColor: '#DC2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        fill: false, 
+                        tension: 0.1,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    { 
+                        label: 'הצמדה למדד (ממוצע)', 
+                        data: [avgOriginal2022, null, avgCpi2024, null, avgCpi2026], 
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        fill: false, 
+                        tension: 0.1, 
+                        borderDash: [5, 5],
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }
                 ]
             };
             generalChart = new Chart(generalCtx, { type: 'line', data: chartData, options: getChartOptions() });
@@ -405,11 +514,13 @@
 
         function updateGeneralUI() {
             const data = allPriceData[generalState.location]?.[generalState.age];
-            generalChartTitle.textContent = `ניתוח מחירים: ${generalState.location} - ${generalState.age}`;
+            generalChartTitle.textContent = `השוואת מחירים: ${generalState.location} - גילאי ${generalState.age}`;
             renderGeneralTable(data);
             renderGeneralChart(data);
-            document.querySelectorAll('.location-btn-general').forEach(btn => btn.classList.toggle('active', btn.dataset.location === generalState.location));
-            document.querySelectorAll('.age-btn-general').forEach(btn => btn.classList.toggle('active', btn.dataset.age === generalState.age));
+            document.querySelectorAll('.location-btn-general').forEach(btn => 
+                btn.classList.toggle('active', btn.dataset.location === generalState.location));
+            document.querySelectorAll('.age-btn-general').forEach(btn => 
+                btn.classList.toggle('active', btn.dataset.age === generalState.age));
         }
         
         function getChartOptions() {
@@ -417,32 +528,58 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'top', labels: { font: { size: 14, family: 'Assistant, sans-serif' } } },
+                    legend: { 
+                        position: 'top', 
+                        labels: { 
+                            font: { size: 14, family: 'Assistant, sans-serif' },
+                            padding: 20
+                        } 
+                    },
                     tooltip: {
                         mode: 'index',
                         intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
                         callbacks: {
                             label: function(context) {
                                 let label = context.dataset.label || '';
                                 if (label) label += ': ';
                                 if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', minimumFractionDigits: 0 }).format(context.parsed.y);
-                                } else {
-                                    return null;
+                                    label += new Intl.NumberFormat('he-IL', { 
+                                        style: 'currency', 
+                                        currency: 'ILS', 
+                                        minimumFractionDigits: 0 
+                                    }).format(context.parsed.y);
                                 }
                                 return label;
                             }
                         }
                     }
                 },
-                scales: { y: { beginAtZero: false, ticks: { callback: (value) => value.toLocaleString() + ' ₪' } } }
+                scales: { 
+                    y: { 
+                        beginAtZero: false,
+                        ticks: { 
+                            callback: (value) => value.toLocaleString() + ' ₪',
+                            font: { size: 12 }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    }
+                }
             };
         }
 
         // --- Event Listeners ---
         mainTabs.forEach(tab => tab.addEventListener('click', () => switchMainTab(tab.dataset.tab)));
-        
-        categorySelect.addEventListener('change', populateApartmentSelect);
+        locationSelect.addEventListener('change', populateApartmentSelect);
+        apartmentSelect.addEventListener('change', updateSqmDefault);
         calculateBtn.addEventListener('click', handleCalculation);
 
         document.querySelectorAll('.location-btn-general, .age-btn-general').forEach(btn => {
@@ -455,11 +592,11 @@
 
         // --- Initial Load ---
         window.addEventListener('DOMContentLoaded', () => {
-             switchMainTab('calculator');
-             document.querySelector('.location-btn-general[data-location="בקעה"]').classList.add('active');
-             document.querySelector('.age-btn-general[data-age="עד גיל 30"]').classList.add('active');
-             populateApartmentSelect();
-             updateGeneralUI();
+            switchMainTab('calculator');
+            document.querySelector('.location-btn-general[data-location="בקעה"]').classList.add('active');
+            document.querySelector('.age-btn-general[data-age="20-30"]').classList.add('active');
+            populateApartmentSelect();
+            updateGeneralUI();
         });
     </script>
 </body>
