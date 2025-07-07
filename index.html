@@ -94,7 +94,7 @@
             <!-- Personal Calculator Tab -->
             <div id="calculator" class="tab-content bg-white p-4 md:p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl md:text-3xl font-semibold text-center mb-8 text-blue-700">מחשבון שכירות אישי</h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 items-end">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 items-end">
                     <div>
                         <label for="ageInput" class="block mb-2 text-sm font-medium text-gray-900">גיל:</label>
                         <input type="number" id="ageInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -110,10 +110,6 @@
                         <select id="houseTypeSelectCalc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
                             <option selected disabled>יש לבחור קודם אזור...</option>
                         </select>
-                    </div>
-                    <div>
-                        <label for="sqmInputCalc" class="block mb-2 text-sm font-medium text-gray-900">שטח לחישוב ארנונה (מ"ר):</label>
-                        <input type="number" id="sqmInputCalc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
                     </div>
                 </div>
                 <div class="text-center mt-6">
@@ -132,8 +128,13 @@
                                  <div class="h-8 bg-red-500 rounded-full transition-all duration-1000" id="new-price-bar" style="width: 0%;"></div>
                                  <div class="absolute text-white font-bold right-2 text-sm" id="new-price-label"></div>
                             </div>
-                            <div class="text-xs text-gray-500 text-right mt-1">מחיר 2025 לאחר שינוי ההסדר (כולל ארנונה)</div>
+                            <div class="text-xs text-gray-500 text-right mt-1" id="new-price-desc">מחיר 2025 לאחר שינוי ההסדר</div>
                         </div>
+                    </div>
+                    <div id="arnona-clarification-calc" class="hidden mt-6 max-w-2xl mx-auto p-4 bg-yellow-100 border-r-4 border-yellow-500 text-yellow-800">
+                        <h3 class="font-bold text-lg">הבהרה</h3>
+                        <p class="mt-2 text-right">חשוב לציין כי החל מספטמבר 2025 הקיבוץ יפסיק לספוג את תשלום הארנונה על בתי הבקעה וכמו בכל שאר הבתים בקיבוץ, דייריו ישלמו את סכום הארנונה למועצה באמצעות חיוב בתקציב האישי, לפי השטח המדוד.</p>
+                        <p id="arnona-details-calc" class="mt-2 text-right font-semibold"></p>
                     </div>
                 </div>
             </div>
@@ -153,6 +154,11 @@
                 </div>
                 <div class="chart-container">
                     <canvas id="timelineChart"></canvas>
+                </div>
+                <div id="arnona-clarification-timeline" class="hidden mt-6 max-w-2xl mx-auto p-4 bg-yellow-100 border-r-4 border-yellow-500 text-yellow-800">
+                    <h3 class="font-bold text-lg">הבהרה</h3>
+                    <p class="mt-2 text-right">חשוב לציין כי החל מספטמבר 2025 הקיבוץ יפסיק לספוג את תשלום הארנונה על בתי הבקעה וכמו בכל שאר הבתים בקיבוץ, דייריו ישלמו את סכום הארנונה למועצה באמצעות חיוב בתקציב האישי, לפי השטח המדוד.</p>
+                    <p id="arnona-details-timeline" class="mt-2 text-right font-semibold"></p>
                 </div>
             </div>
 
@@ -200,12 +206,12 @@
     <script>
         const housingData = {
             '30_MINUS': [
-                { area: 'בקעה', type: 'חדר יחיד ברכבות', sqm: 21, price2022: 850, price2023: 900, price2024: 1000, price2025_old: 1000, price2025_new: 1050 },
-                { area: 'בקעה', type: 'חדר אמצע', sqm: 17, price2022: 850, price2023: 900, price2024: 1000, price2025_old: 1000, price2025_new: 1050 },
-                { area: 'בקעה', type: 'בית חיילים', sqm: 27, price2022: 850, price2023: 900, price2024: 1000, price2025_old: 1000, price2025_new: 1050 },
-                { area: 'בקעה', type: 'רכבות חדר כפול', sqm: 38, price2022: 1500, price2023: 1700, price2024: 2000, price2025_old: 2000, price2025_new: 2200 },
-                { area: 'בקעה', type: 'דירת צד', sqm: 43, price2022: 1600, price2023: 1900, price2024: 2200, price2025_old: 2200, price2025_new: 2400 },
-                { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 1800, price2023: 2200, price2024: 2600, price2025_old: 2600, price2025_new: 2700 },
+                { area: 'בקעה', type: 'חדר יחיד ברכבות', sqm: 21, price2022: 850, price2023: 900, price2024: 1000, price2025_old: 1000, price2025_new: 1050, arnonaValue: 76 },
+                { area: 'בקעה', type: 'חדר אמצע', sqm: 17, price2022: 850, price2023: 900, price2024: 1000, price2025_old: 1000, price2025_new: 1050, arnonaValue: 60 },
+                { area: 'בקעה', type: 'בית חיילים', sqm: 27, price2022: 850, price2023: 900, price2024: 1000, price2025_old: 1000, price2025_new: 1050, arnonaValue: 98 },
+                { area: 'בקעה', type: 'רכבות חדר כפול', sqm: 38, price2022: 1500, price2023: 1700, price2024: 2000, price2025_old: 2000, price2025_new: 2200, arnonaValue: 135 },
+                { area: 'בקעה', type: 'דירת צד', sqm: 43, price2022: 1600, price2023: 1900, price2024: 2200, price2025_old: 2200, price2025_new: 2400, arnonaValue: 154 },
+                { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 1800, price2023: 2200, price2024: 2600, price2025_old: 2600, price2025_new: 2700, arnonaValue: 205 },
                 { area: 'סדנה/נוער', type: 'דירת סדנה', sqm: 60.5, price2022: 1750, price2023: 2400, price2024: 3100, price2025_old: 3800, price2025_new: 4600 },
                 { area: 'סדנה/נוער', type: 'דירת 3 חדרים', sqm: 80, price2022: null, price2023: null, price2024: null, price2025_old: null, price2025_new: 4900 },
                 { area: 'סדנה/נוער', type: 'דירת נוער (מורחבת 4.5 חדרים)', sqm: 71, price2022: 1850, price2023: 2400, price2024: 3000, price2025_old: 3700, price2025_new: 4900 },
@@ -224,12 +230,12 @@
                 { area: 'מחנה', type: 'שכונות חדשות', sqm: 128, price2022: null, price2023: null, price2024: null, price2025_old: null, price2025_new: 10800 },
             ],
             '31-37': [
-                { area: 'בקעה', type: 'חדר יחיד ברכבות', sqm: 21, price2022: 1350, price2023: 1400, price2024: 1600, price2025_old: 1600, price2025_new: 1700 },
-                { area: 'בקעה', type: 'חדר אמצע', sqm: 17, price2022: 1350, price2023: 1400, price2024: 1600, price2025_old: 1600, price2025_new: 1700 },
-                { area: 'בקעה', type: 'בית חיילים', sqm: 27, price2022: 1350, price2023: 1400, price2024: 1600, price2025_old: 1600, price2025_new: 1700 },
-                { area: 'בקעה', type: 'רכבות חדר כפול', sqm: 38, price2022: 2050, price2023: 2200, price2024: 2400, price2025_old: 2400, price2025_new: 2600 },
-                { area: 'בקעה', type: 'דירת צד', sqm: 43, price2022: 2200, price2023: 2400, price2024: 2600, price2025_old: 2600, price2025_new: 2800 },
-                { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 2400, price2023: 2800, price2024: 3300, price2025_old: 3300, price2025_new: 3400 },
+                { area: 'בקעה', type: 'חדר יחיד ברכבות', sqm: 21, price2022: 1350, price2023: 1400, price2024: 1600, price2025_old: 1600, price2025_new: 1700, arnonaValue: 76 },
+                { area: 'בקעה', type: 'חדר אמצע', sqm: 17, price2022: 1350, price2023: 1400, price2024: 1600, price2025_old: 1600, price2025_new: 1700, arnonaValue: 60 },
+                { area: 'בקעה', type: 'בית חיילים', sqm: 27, price2022: 1350, price2023: 1400, price2024: 1600, price2025_old: 1600, price2025_new: 1700, arnonaValue: 98 },
+                { area: 'בקעה', type: 'רכבות חדר כפול', sqm: 38, price2022: 2050, price2023: 2200, price2024: 2400, price2025_old: 2400, price2025_new: 2600, arnonaValue: 135 },
+                { area: 'בקעה', type: 'דירת צד', sqm: 43, price2022: 2200, price2023: 2400, price2024: 2600, price2025_old: 2600, price2025_new: 2800, arnonaValue: 154 },
+                { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 2400, price2023: 2800, price2024: 3300, price2025_old: 3300, price2025_new: 3400, arnonaValue: 205 },
                 { area: 'סדנה/נוער', type: 'דירת סדנה', sqm: 60.5, price2022: 2600, price2023: 2900, price2024: 3400, price2025_old: 3800, price2025_new: 4600 },
                 { area: 'סדנה/נוער', type: 'דירת 3 חדרים', sqm: 80, price2022: null, price2023: null, price2024: null, price2025_old: null, price2025_new: 4900 },
                 { area: 'סדנה/נוער', type: 'דירת נוער (מורחבת 4.5 חדרים)', sqm: 71, price2022: 2800, price2023: 3000, price2024: 3400, price2025_old: 3700, price2025_new: 5600 },
@@ -248,12 +254,12 @@
                 { area: 'מחנה', type: 'שכונות חדשות', sqm: 128, price2022: null, price2023: null, price2024: null, price2025_old: null, price2025_new: 10800 },
             ],
             '38_PLUS': [
-                { area: 'בקעה', type: 'חדר יחיד ברכבות', sqm: 21, price2022: 1700, price2023: 1800, price2024: 2100, price2025_old: 2100, price2025_new: 2200 },
-                { area: 'בקעה', type: 'חדר אמצע', sqm: 17, price2022: 1700, price2023: 1800, price2024: 2100, price2025_old: 2100, price2025_new: 2200 },
-                { area: 'בקעה', type: 'בית חיילים', sqm: 27, price2022: 2000, price2023: 2000, price2024: 2100, price2025_old: 2100, price2025_new: 2200 },
-                { area: 'בקעה', type: 'רכבות חדר כפול', sqm: 38, price2022: 3300, price2023: 3300, price2024: 3500, price2025_old: 3500, price2025_new: 3800 },
-                { area: 'בקעה', type: 'דירת צד', sqm: 43, price2022: 3600, price2023: 3600, price2024: 3800, price2025_old: 3800, price2025_new: 4100 },
-                { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 4300, price2023: 4300, price2024: 4500, price2025_old: 4500, price2025_new: 4600 },
+                { area: 'בקעה', type: 'חדר יחיד ברכבות', sqm: 21, price2022: 1700, price2023: 1800, price2024: 2100, price2025_old: 2100, price2025_new: 2200, arnonaValue: 76 },
+                { area: 'בקעה', type: 'חדר אמצע', sqm: 17, price2022: 1700, price2023: 1800, price2024: 2100, price2025_old: 2100, price2025_new: 2200, arnonaValue: 60 },
+                { area: 'בקעה', type: 'בית חיילים', sqm: 27, price2022: 2000, price2023: 2000, price2024: 2100, price2025_old: 2100, price2025_new: 2200, arnonaValue: 98 },
+                { area: 'בקעה', type: 'רכבות חדר כפול', sqm: 38, price2022: 3300, price2023: 3300, price2024: 3500, price2025_old: 3500, price2025_new: 3800, arnonaValue: 135 },
+                { area: 'בקעה', type: 'דירת צד', sqm: 43, price2022: 3600, price2023: 3600, price2024: 3800, price2025_old: 3800, price2025_new: 4100, arnonaValue: 154 },
+                { area: 'בקעה', type: 'דירת צד מורחבת', sqm: 57, price2022: 4300, price2023: 4300, price2024: 4500, price2025_old: 4500, price2025_new: 4600, arnonaValue: 205 },
                 { area: 'סדנה/נוער', type: 'דירת סדנה', sqm: 60.5, price2022: 4800, price2023: 4800, price2024: 4800, price2025_old: 4800, price2025_new: 5600 },
                 { area: 'סדנה/נוער', type: 'דירת 3 חדרים', sqm: 80, price2022: null, price2023: null, price2024: null, price2025_old: null, price2025_new: 5900 },
                 { area: 'סדנה/נוער', type: 'דירת נוער (מורחבת 4.5 חדרים)', sqm: 71, price2022: 4700, price2023: 4700, price2024: 4700, price2025_old: 4700, price2025_new: 6600 },
@@ -291,8 +297,14 @@
         const timelineCtx = document.getElementById('timelineChart').getContext('2d');
         const increaseCtx = document.getElementById('priceIncreaseChart').getContext('2d');
 
+        // --- Helper Functions ---
+        function formatCurrency(value) {
+            if (value == null || isNaN(value)) return 'N/A';
+            return `${value.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} ₪`;
+        }
+
         // --- Timeline Chart Logic ---
-        function updateTimelineChart(area, houseType) {
+        function updateTimelineChart(area, houseType, withArnona = false) {
             if (timelineChartInstance) {
                 timelineChartInstance.destroy();
             }
@@ -306,8 +318,13 @@
             for (const group in housingData) {
                 const house = housingData[group].find(h => h.area === area && h.type === houseType);
                 if (house) {
-                    const arnona = house.sqm && house.price2025_new ? house.sqm * ARNONA_RATE : 0;
-                    const newPrice = house.price2025_new ? house.price2025_new + arnona : null;
+                    let newPrice = house.price2025_new;
+                    if (withArnona && area === 'בקעה' && house.sqm && house.price2025_new) {
+                        const sqm = parseFloat(document.getElementById('sqmInputTimeline').value);
+                        if (sqm > 0) {
+                           newPrice += sqm * ARNONA_RATE;
+                        }
+                    }
                     datasets.push({
                         label: ageGroupLabels[group],
                         data: [house.price2022, house.price2023, house.price2024, house.price2025_old, newPrice],
@@ -331,10 +348,25 @@
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: false, ticks: { callback: value => '₪' + value.toLocaleString() } } },
-                    plugins: { tooltip: { callbacks: { label: context => `${context.dataset.label}: ₪${context.parsed.y.toLocaleString()}` } } }
+                    scales: { y: { beginAtZero: false, ticks: { callback: value => value != null ? value.toLocaleString() : 'N/A' } } },
+                    plugins: { tooltip: { callbacks: { label: context => `${context.dataset.label}: ₪${context.parsed.y != null ? context.parsed.y.toLocaleString() : 'N/A'}` } } }
                 }
             });
+            
+            const arnonaClarification = document.getElementById('arnona-clarification-timeline');
+            const arnonaDetails = document.getElementById('arnona-details-timeline');
+            
+            if(area === 'בקעה') {
+                arnonaClarification.classList.remove('hidden');
+                const house = housingData['38_PLUS'].find(h => h.area === area && h.type === houseType);
+                if(house && house.sqm && house.arnonaValue) {
+                    arnonaDetails.textContent = `${house.type} הוא בערך ${house.sqm} מ"ר וב2025 תשלום הארנונה הוא בערך ${formatCurrency(house.arnonaValue)}.`;
+                } else {
+                     arnonaDetails.textContent = '';
+                }
+            } else {
+                arnonaClarification.classList.add('hidden');
+            }
         }
 
         // --- Price Increase Analysis Logic ---
@@ -360,8 +392,7 @@
 
                 let currentStart = null;
                 let currentEnd = null;
-                const arnona = house.sqm && house.price2025_new ? house.sqm * ARNONA_RATE : 0;
-
+                
                 if (option === '2022_2025_orig') {
                     currentStart = house.price2022;
                     currentEnd = house.price2025_old;
@@ -370,17 +401,45 @@
                     currentEnd = house.price2025_old;
                 } else if (option === '2024_2025_new') {
                     currentStart = house.price2024;
-                    currentEnd = house.price2025_new + arnona;
+                    currentEnd = house.price2025_new;
                 }
 
-                if (currentStart === 0) return { type: house.type, increase: 0 };
+                if (currentStart == null || currentEnd == null || currentStart === 0) return null;
                 const increase = ((currentEnd - currentStart) / currentStart) * 100;
 
                 return { type: house.type, increase };
             }).filter(d => d !== null).sort((a, b) => b.increase - a.increase);
 
+            const allZero = increaseData.length > 0 && increaseData.every(d => d.increase === 0);
+            const chartType = allZero ? 'bar' : 'polarArea';
+
+            let chartOptions;
+            if (chartType === 'bar') {
+                chartOptions = {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { ticks: { callback: value => value.toFixed(0) + '%' } } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: context => `אחוז עלייה: ${context.parsed.x.toFixed(2)}%` } },
+                        title: {
+                            display: true,
+                            text: 'לא חל שינוי בתעריף בתקופה זו',
+                            padding: { top: 10, bottom: 10 },
+                            font: { size: 16 }
+                        }
+                    }
+                };
+            } else { // polarArea options
+                chartOptions = {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { r: { ticks: { backdropColor: 'transparent', callback: value => value.toFixed(0) + '%' }, grid: { color: 'rgba(0, 0, 0, 0.1)' } } },
+                    plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw.toFixed(2)}%` } } }
+                };
+            }
+
             priceIncreaseChartInstance = new Chart(increaseCtx, {
-                type: 'polarArea',
+                type: chartType,
                 data: {
                     labels: increaseData.map(d => d.type),
                     datasets: [{
@@ -392,11 +451,7 @@
                         borderWidth: 1
                     }]
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { r: { ticks: { backdropColor: 'transparent', callback: value => value.toFixed(0) + '%' }, grid: { color: 'rgba(0, 0, 0, 0.1)' } } },
-                    plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw.toFixed(2)}%` } } }
-                }
+                options: chartOptions
             });
         }
 
@@ -404,10 +459,12 @@
         const ageInput = document.getElementById('ageInput');
         const areaSelectCalc = document.getElementById('areaSelectCalc');
         const houseTypeSelectCalc = document.getElementById('houseTypeSelectCalc');
-        const sqmInputCalc = document.getElementById('sqmInputCalc');
         const calculateBtn = document.getElementById('calculateBtn');
         const personalResultDiv = document.getElementById('personalResult');
         const summaryDiv = document.getElementById('summary');
+        const newPriceDesc = document.getElementById('new-price-desc');
+        const arnonaClarificationCalc = document.getElementById('arnona-clarification-calc');
+        const arnonaDetailsCalc = document.getElementById('arnona-details-calc');
 
         function populateCalcAreaSelect() {
             areaSelectCalc.innerHTML = '<option selected disabled>בחירה...</option>';
@@ -422,37 +479,23 @@
         });
         
         function checkCalcButtonState() {
-            calculateBtn.disabled = !(ageInput.value && areaSelectCalc.value && houseTypeSelectCalc.value && sqmInputCalc.value);
+            calculateBtn.disabled = !(ageInput.value && areaSelectCalc.value && houseTypeSelectCalc.value);
         }
 
-        [ageInput, areaSelectCalc, houseTypeSelectCalc, sqmInputCalc].forEach(el => el.addEventListener('change', checkCalcButtonState));
-        [ageInput, sqmInputCalc].forEach(el => el.addEventListener('input', checkCalcButtonState));
-
-
-        houseTypeSelectCalc.addEventListener('change', () => {
-            const age = parseInt(ageInput.value);
-            if (!age) return;
-            const ageGroup = age <= 30 ? '30_MINUS' : (age <= 37 ? '31-37' : '38_PLUS');
-
-            const selectedHouse = housingData[ageGroup].find(h => h.area === areaSelectCalc.value && h.type === houseTypeSelectCalc.value);
-            sqmInputCalc.disabled = false;
-            if (selectedHouse && selectedHouse.sqm) {
-                sqmInputCalc.value = selectedHouse.sqm;
-            } else {
-                sqmInputCalc.value = '';
-                sqmInputCalc.placeholder = 'שטח לא נמצא, בבקשה להזין ידנית';
-            }
-            checkCalcButtonState();
-        });
+        [ageInput, areaSelectCalc, houseTypeSelectCalc].forEach(el => el.addEventListener('change', checkCalcButtonState));
+        
+        let currentCalcData = {};
 
         calculateBtn.addEventListener('click', () => {
+            arnonaClarificationCalc.classList.add('hidden');
+            newPriceDesc.textContent = 'מחיר 2025 לאחר שינוי ההסדר';
+            
             const age = parseInt(ageInput.value);
             const ageGroup = age <= 30 ? '30_MINUS' : (age <= 37 ? '31-37' : '38_PLUS');
             const selectedArea = areaSelectCalc.value;
             const selectedType = houseTypeSelectCalc.value;
-            const sqm = parseFloat(sqmInputCalc.value);
 
-            if (!age || !selectedArea || !selectedType || !sqm || sqm <= 0) {
+            if (!age || !selectedArea || !selectedType) {
                 alert('יש למלא את כל השדות כראוי.');
                 return;
             }
@@ -462,12 +505,14 @@
                 alert('לא נמצאו נתונים עבור הבחירה שלך בקבוצת הגיל שלך.');
                 return;
             }
+            
+            currentCalcData = { ...selectedHouse, ageGroup };
 
             const price2025old = selectedHouse.price2025_old;
             const price2025new_base = selectedHouse.price2025_new;
             
-            if (price2025old === null || price2025new_base === null) {
-                 summaryDiv.innerHTML = `<p class="text-xl text-gray-600">לא ניתן לבצע השוואה עבור בית זה מכיוון שחסרים נתונים באחד ההסדרים.</p>`;
+            if (price2025old == null || price2025new_base == null) {
+                 summaryDiv.innerHTML = `<p class="text-xl text-gray-600">לא ניתן לבצע השוואה עבור בית זה מכיוון שחסרים נתונים באחד ההסדרים. <a href="#" class="text-blue-600 underline" onclick="document.querySelector('.tab-btn[data-tab=data-tables]').click()">לצפייה בטבלאות</a></p>`;
                  personalResultDiv.classList.remove('hidden');
                  document.getElementById('interactive-visualization').classList.add('hidden');
                  return;
@@ -475,43 +520,34 @@
             
             document.getElementById('interactive-visualization').classList.remove('hidden');
 
-            const arnona = sqm * ARNONA_RATE;
-            const newTotalPrice = price2025new_base + arnona;
+            const newTotalPrice = price2025new_base; // Default without arnona
             const increasePercentage = price2025old > 0 ? ((newTotalPrice - price2025old) / price2025old) * 100 : 0;
 
-            let discountHTML = '';
-            if (ageGroup !== '38_PLUS') {
-                const seniorHouse = housingData['38_PLUS'].find(h => h.area === selectedArea && h.type === selectedType);
-                if (seniorHouse && seniorHouse.price2025_new && seniorHouse.sqm) {
-                    const seniorNewPrice = seniorHouse.price2025_new + (seniorHouse.sqm * ARNONA_RATE);
-                    if (seniorNewPrice > 0) {
-                        const discount = ((seniorNewPrice - newTotalPrice) / seniorNewPrice) * 100;
-                        if (discount > 0) {
-                            discountHTML = `<div class="discount-badge">הנחה של ${discount.toFixed(2)}% לעומת תעריף 38+</div>`;
-                        }
-                    }
-                }
-            }
-
             summaryDiv.innerHTML = `
-                <p class="text-xl text-gray-600"> החל מספטמבר 25  בהסדר הקיים: <span class="font-bold text-blue-600">₪${price2025old.toLocaleString()}</span></p>
+                <p class="text-xl text-gray-600"> החל מספטמבר 25  בהסדר הקיים: <span class="font-bold text-blue-600">${formatCurrency(price2025old)}</span></p>
                 <p class="text-xl text-gray-600 mt-2">החל מספטמבר 25 בהסדר המוצע:</p>
-                <p class="summary-value summary-value-bad">₪${newTotalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                <p class="text-sm text-gray-500">(₪${price2025new_base.toLocaleString()} שכירות + ₪${arnona.toFixed(2)} ארנונה)</p>
+                <p class="summary-value summary-value-bad">${formatCurrency(newTotalPrice)}</p>
                 <p class="text-2xl font-bold mt-4">התייקרות של <span class="text-red-500">${increasePercentage.toFixed(2)}%</span></p>
-                ${discountHTML}
             `;
             personalResultDiv.classList.remove('hidden');
 
-            // Animate bars
             const maxPrice = Math.max(price2025old, newTotalPrice) * 1.1;
             const oldPriceWidth = (price2025old / maxPrice) * 100;
             const newPriceWidth = (newTotalPrice / maxPrice) * 100;
 
             document.getElementById('old-price-bar').style.width = `${oldPriceWidth}%`;
-            document.getElementById('old-price-label').innerText = `₪${price2025old.toLocaleString()}`;
+            document.getElementById('old-price-label').innerText = formatCurrency(price2025old);
             document.getElementById('new-price-bar').style.width = `${newPriceWidth}%`;
-            document.getElementById('new-price-label').innerText = `₪${newTotalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('new-price-label').innerText = formatCurrency(newTotalPrice);
+            
+            if (selectedArea === 'בקעה') {
+                arnonaClarificationCalc.classList.remove('hidden');
+                if(selectedHouse && selectedHouse.sqm && selectedHouse.arnonaValue) {
+                    arnonaDetailsCalc.textContent = `${selectedHouse.type} הוא בערך ${selectedHouse.sqm} מ"ר וב2025 תשלום הארנונה הוא בערך 3.58 ₪ ולכן המחיר המשוער של הארנונה הוא ${formatCurrency(selectedHouse.arnonaValue)}.`;
+                } else {
+                     arnonaDetailsCalc.textContent = '';
+                }
+            }
         });
 
         // --- Event Listeners & Initializers ---
@@ -523,82 +559,72 @@
             const tabContents = document.querySelectorAll('.tab-content');
 
             function switchTab(tabName) {
-                // Hide all content
-                tabContents.forEach(content => {
-                    content.classList.add('hidden');
-                });
-                // Show target content
+                tabContents.forEach(content => content.classList.add('hidden'));
                 document.getElementById(tabName).classList.remove('hidden');
-
-                // Update desktop tabs active state
-                desktopNavLinks.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tabName);
-                });
-
-                // Close mobile menu
+                desktopNavLinks.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabName));
                 mobileMenuOverlay.classList.add('hidden');
             }
 
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenuOverlay.classList.toggle('hidden');
-            });
-
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => mobileMenuOverlay.classList.toggle('hidden'));
+            }
             mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    switchTab(link.dataset.tab);
-                });
+                if (link) link.addEventListener('click', () => switchTab(link.dataset.tab));
             });
-            
             desktopNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    switchTab(link.dataset.tab);
-                });
+                if (link) link.addEventListener('click', () => switchTab(link.dataset.tab));
             });
             
-            // Timeline Tab Selects
             const areaSelectTimeline = document.getElementById('areaSelectTimeline');
             const houseTypeSelectTimeline = document.getElementById('houseTypeSelectTimeline');
-            areaSelectTimeline.innerHTML = '<option selected disabled>בחירה...</option>';
-            allAreas.forEach(area => areaSelectTimeline.add(new Option(area, area)));
             
-            areaSelectTimeline.addEventListener('change', () => {
-                const selectedArea = areaSelectTimeline.value;
-                houseTypeSelectTimeline.innerHTML = '<option selected disabled>בחירה...</option>';
-                allHouseTypesByArea[selectedArea].forEach(type => houseTypeSelectTimeline.add(new Option(type, type)));
-                houseTypeSelectTimeline.disabled = false;
-                updateTimelineChart(null, null);
-            });
-            houseTypeSelectTimeline.addEventListener('change', () => {
-                updateTimelineChart(areaSelectTimeline.value, houseTypeSelectTimeline.value);
-            });
+            if (areaSelectTimeline) {
+                areaSelectTimeline.innerHTML = '<option selected disabled>בחירה...</option>';
+                allAreas.forEach(area => areaSelectTimeline.add(new Option(area, area)));
+                
+                areaSelectTimeline.addEventListener('change', () => {
+                    const selectedArea = areaSelectTimeline.value;
+                    houseTypeSelectTimeline.innerHTML = '<option selected disabled>בחירה...</option>';
+                    allHouseTypesByArea[selectedArea].forEach(type => houseTypeSelectTimeline.add(new Option(type, type)));
+                    houseTypeSelectTimeline.disabled = false;
+                    updateTimelineChart(null, null);
+                });
+            }
 
-            // Increase Analysis Tab Radios
+            if (houseTypeSelectTimeline) {
+                houseTypeSelectTimeline.addEventListener('change', () => {
+                    const selectedArea = areaSelectTimeline.value;
+                    const selectedType = houseTypeSelectTimeline.value;
+                    updateTimelineChart(selectedArea, selectedType, false);
+                });
+            }
+
             const increaseOptionRadios = document.querySelectorAll('input[name="increase_option"]');
             const ageGroupOptionRadios = document.querySelectorAll('input[name="age_group_option"]');
 
             function handleIncreaseChartUpdate() {
-                const selectedOption = document.querySelector('input[name="increase_option"]:checked').value;
-                const selectedAgeGroup = document.querySelector('input[name="age_group_option"]:checked').value;
-                updateIncreaseChart(selectedOption, selectedAgeGroup);
+                const selectedOptionEl = document.querySelector('input[name="increase_option"]:checked');
+                const selectedAgeGroupEl = document.querySelector('input[name="age_group_option"]:checked');
+                if (selectedOptionEl && selectedAgeGroupEl) {
+                    updateIncreaseChart(selectedOptionEl.value, selectedAgeGroupEl.value);
+                }
             }
 
             increaseOptionRadios.forEach(radio => radio.addEventListener('change', handleIncreaseChartUpdate));
             ageGroupOptionRadios.forEach(radio => radio.addEventListener('change', handleIncreaseChartUpdate));
             
-            // Initialize
             function initializeTimelineWithRandom() {
+                if (!areaSelectTimeline) return;
                 const randomHouse = allComparableHouses[Math.floor(Math.random() * allComparableHouses.length)];
                 areaSelectTimeline.value = randomHouse.area;
-                
                 const event = new Event('change');
                 areaSelectTimeline.dispatchEvent(event);
-
                 houseTypeSelectTimeline.value = randomHouse.type;
                 updateTimelineChart(randomHouse.area, randomHouse.type);
             }
 
             populateCalcAreaSelect();
-            handleIncreaseChartUpdate(); // Initial chart
+            handleIncreaseChartUpdate();
             initializeTimelineWithRandom();
         });
     </script>
