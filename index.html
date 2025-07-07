@@ -428,13 +428,25 @@
                             padding: { top: 10, bottom: 10 },
                             font: { size: 16 }
                         }
+                    },
+                    onClick: (e, elements, chart) => {
+                        if (elements.length === 0) return;
+                        const index = elements[0].index;
+                        chart.toggleDataVisibility(index);
+                        chart.update();
                     }
                 };
             } else { // polarArea options
                 chartOptions = {
                     responsive: true, maintainAspectRatio: false,
                     scales: { r: { ticks: { backdropColor: 'transparent', callback: value => value.toFixed(0) + '%' }, grid: { color: 'rgba(0, 0, 0, 0.1)' } } },
-                    plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw.toFixed(2)}%` } } }
+                    plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw.toFixed(2)}%` } } },
+                    onClick: (e, elements, chart) => {
+                        if (elements.length === 0) return;
+                        const index = elements[0].index;
+                        chart.toggleDataVisibility(index);
+                        chart.update();
+                    }
                 };
             }
 
@@ -543,7 +555,7 @@
             if (selectedArea === 'בקעה') {
                 arnonaClarificationCalc.classList.remove('hidden');
                 if(selectedHouse && selectedHouse.sqm && selectedHouse.arnonaValue) {
-                    arnonaDetailsCalc.textContent = `${selectedHouse.type} הוא בערך ${selectedHouse.sqm} מ"ר וב2025 תשלום הארנונה הוא בערך 3.58 ₪ ולכן המחיר המשוער של הארנונה הוא ${formatCurrency(selectedHouse.arnonaValue)}.`;
+                    arnonaDetailsCalc.textContent = `${selectedHouse.type} הוא בערך ${selectedHouse.sqm} מ"ר וב2025 תשלום הארנונה הוא בערך ${formatCurrency(selectedHouse.arnonaValue)}.`;
                 } else {
                      arnonaDetailsCalc.textContent = '';
                 }
